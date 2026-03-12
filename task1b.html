@@ -794,6 +794,15 @@
 
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    background: var(--green-pale);
+    color: var(--green-deep);
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
   footer {
     background: var(--green-deep);
     color: rgba(255,255,255,0.5);
@@ -825,34 +834,293 @@
 
 <!-- HEADER -->
 <header>
-  <div class="header-badge">T Level Digital Production, Design & Development</div>
+  <div class="header-badge">T Level Digital Production, Design & Development — Distinction Target</div>
   <h1>Task 1b — <span>Design Document</span></h1>
-  <p>Greenfield Local Hub — A community co-operative web platform connecting local farmers, producers and residents.</p>
+  <p>Greenfield Local Hub — Community co-operative web platform. Enhanced to Distinction criteria with FURPS, KPIs, UAC, legislation mapping, CIA security controls &amp; full IPO decomposition.</p>
   <div class="header-meta">
     <div class="header-meta-item"><span class="label">Project</span><span class="value">Greenfield Local Hub</span></div>
     <div class="header-meta-item"><span class="label">Task</span><span class="value">1b — Designing the Solution</span></div>
     <div class="header-meta-item"><span class="label">Stack</span><span class="value">HTML / CSS / JS · PHP · MySQL</span></div>
-    <div class="header-meta-item"><span class="label">Document</span><span class="value">Wireframes · Algorithms · Data · Testing</span></div>
+    <div class="header-meta-item"><span class="label">Grade Target</span><span class="value">⭐ Distinction</span></div>
+    <div class="header-meta-item"><span class="label">Sections</span><span class="value">Rationale · FURPS · Wireframes · Algorithms · Data · ERD · Testing · Security</span></div>
   </div>
 </header>
 
 <!-- NAV -->
 <nav>
-  <a href="#wireframes">1. Wireframes</a>
-  <a href="#algorithms">2. Algorithms</a>
-  <a href="#data">3. Data Requirements</a>
-  <a href="#erd">4. ERD</a>
-  <a href="#testing">5. Test Strategy</a>
+  <a href="#rationale">0. Business Rationale</a>
+  <a href="#requirements">1. Requirements (FURPS)</a>
+  <a href="#wireframes">2. Wireframes</a>
+  <a href="#algorithms">3. Algorithms</a>
+  <a href="#data">4. Data Requirements</a>
+  <a href="#erd">5. ERD</a>
+  <a href="#testing">6. Test Strategy</a>
+  <a href="#security">7. Security Controls</a>
 </nav>
 
 <div class="container">
 
+
   <!-- ═══════════════════════════════════════════════════════
-       SECTION 1: WIREFRAMES
+       SECTION 0: BUSINESS RATIONALE (NEW — DISTINCTION)
   ══════════════════════════════════════════════════════════ -->
-  <div class="section" id="wireframes">
+  <div class="section" id="rationale">
+    <div class="section-header">
+      <div class="section-number">0</div>
+      <div>
+        <div class="section-title">Business Context &amp; Rationale</div>
+        <div class="section-subtitle">Comprehensive justification for the Greenfield Local Hub platform, KPIs, UAC and legislation</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Cooperative Business Rationale</div>
+      <p style="font-size:13.5px;line-height:1.75;color:var(--text);">
+        Greenfield Local Hub is a digital cooperative platform modelled on the principles of organisations such as Arla Foods, where producers collectively own and govern the distribution of their output. In a traditional supply chain, intermediaries (supermarkets, wholesalers) capture the majority of the margin, leaving local farmers and producers with little commercial control or consumer visibility. This platform addresses that imbalance directly by providing a <strong>direct-to-community digital channel</strong> that eliminates intermediary markups and passes value back to both producers and consumers.
+      </p>
+      <p style="font-size:13.5px;line-height:1.75;color:var(--text);margin-top:10px;">
+        From a <strong>sustainability perspective</strong>, short supply chains substantially reduce food miles — the distance food travels from production to consumer — directly lowering the cooperative's carbon footprint and contributing to the UK Government's Net Zero 2050 target. By surfacing producer profiles and farm stories alongside products, the platform also builds <strong>consumer trust and brand loyalty</strong>, which is evidenced in consumer research as a primary driver of purchasing decisions in the local food sector.
+      </p>
+      <p style="font-size:13.5px;line-height:1.75;color:var(--text);margin-top:10px;">
+        The loyalty scheme is specifically designed to incentivise repeat purchasing behaviour through a progressive discount model (5% at £25, 10% at £75, 20% at £150 cumulative spend). This increases <strong>customer lifetime value (CLV)</strong> and reduces churn — two core metrics for cooperative viability. Meanwhile, the admin stock tracing module (linking every product to a batch, a producer, and a delivery date) fulfils <strong>food safety traceability obligations</strong> under the UK Food Safety Act 1990 and EU Regulation (EC) 178/2002, which require food businesses to be able to trace products "one step forward, one step back" in the supply chain.
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Key Performance Indicators (KPIs)</div>
+        <table class="data-table" style="margin-bottom:0;">
+          <thead><tr><th>#</th><th>KPI</th><th>Target</th><th>Measurement Method</th></tr></thead>
+          <tbody>
+            <tr>
+              <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--green-mid);">KPI-1</td>
+              <td><strong>User Registration Rate</strong> — Number of community members who register an account within the first 3 months of launch</td>
+              <td>≥ 200 registered users</td>
+              <td>COUNT(id) FROM users WHERE created_at ≤ launch + 90 days</td>
+            </tr>
+            <tr>
+              <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--green-mid);">KPI-2</td>
+              <td><strong>Loyalty Scheme Uptake</strong> — Percentage of registered users who reach the first loyalty tier (£25 spend)</td>
+              <td>≥ 40% of users reach Bronze tier within 6 months</td>
+              <td>COUNT(users WHERE loyalty_tier != 'none') / COUNT(users) × 100</td>
+            </tr>
+            <tr>
+              <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--green-mid);">KPI-3</td>
+              <td><strong>Page Load Performance</strong> — The product catalogue page must load within acceptable time under normal conditions</td>
+              <td>≤ 3 seconds on a standard broadband connection</td>
+              <td>Measured using browser DevTools / Lighthouse audit during testing phase</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">User Acceptance Criteria (UAC)</div>
+        <table class="data-table" style="margin-bottom:0;">
+          <thead><tr><th>#</th><th>Criterion</th><th>Acceptance Condition</th></tr></thead>
+          <tbody>
+            <tr>
+              <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--green-mid);">UAC-1</td>
+              <td><strong>Accessibility</strong> — The platform must be usable by people with visual impairments or motor disabilities</td>
+              <td>All pages pass WCAG 2.1 Level AA automated checks (axe / Lighthouse). Screen reader navigation works correctly on all main pages.</td>
+            </tr>
+            <tr>
+              <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--green-mid);">UAC-2</td>
+              <td><strong>Checkout Flow</strong> — A registered user must be able to complete a purchase from product browse to order confirmation</td>
+              <td>A test user can browse, add to basket, apply loyalty discount, and place an order in ≤ 5 steps without any errors or confusion</td>
+            </tr>
+            <tr>
+              <td style="font-family:'DM Mono',monospace;font-weight:700;color:var(--green-mid);">UAC-3</td>
+              <td><strong>Admin Stock Management</strong> — An admin must be able to trace any sold product back to its originating farm and batch</td>
+              <td>Admin can navigate from any order → order_item → batch → producer in the admin dashboard in ≤ 3 clicks</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Legal &amp; Regulatory Compliance</div>
+      <table class="data-table" style="margin-bottom:0;">
+        <thead><tr><th>Legislation / Standard</th><th>Relevance to Greenfield Local Hub</th><th>Implementation</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>UK GDPR / Data Protection Act 2018</strong></td>
+            <td>The loyalty scheme collects and processes personal data (name, email, purchase history, address). Users must give informed consent and have the right to erasure ("right to be forgotten").</td>
+            <td>GDPR consent checkbox on registration. Privacy policy page. Soft-delete (is_active=0) allows data removal. Passwords hashed; payment data not stored in-house.</td>
+          </tr>
+          <tr>
+            <td><strong>WCAG 2.1 Level AA</strong><br><span style="font-size:10px;color:var(--text-muted);">(Web Content Accessibility Guidelines)</span></td>
+            <td>As a community platform intended for all residents including elderly and disabled users, the site must be perceivable, operable, understandable, and robust.</td>
+            <td>ARIA labels, skip navigation, minimum contrast ratio 4.5:1, keyboard-navigable menus, responsive design for mobile and tablet users.</td>
+          </tr>
+          <tr>
+            <td><strong>UK Food Safety Act 1990 &amp; EU Reg. 178/2002</strong></td>
+            <td>Food business operators must be able to trace products through the supply chain. The batch tracing system directly fulfils this obligation.</td>
+            <td>batches table links every product to a producer and delivery date. order_items stores batch_id so any sold unit can be traced back to source.</td>
+          </tr>
+          <tr>
+            <td><strong>Computer Misuse Act 1990</strong></td>
+            <td>The platform must be protected against unauthorised access and modification of data (covered by brute-force protection, RBAC, and prepared statements).</td>
+            <td>Role-based access control, session validation on every admin page, audit logging of all admin actions.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div><!-- end rationale -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 1: FURPS REQUIREMENTS (NEW — DISTINCTION)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section" id="requirements">
     <div class="section-header">
       <div class="section-number">1</div>
+      <div>
+        <div class="section-title">Requirements Analysis — FURPS Model</div>
+        <div class="section-subtitle">Comprehensive functional and non-functional requirements using the FURPS framework</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>FURPS</strong> stands for <strong>F</strong>unctionality, <strong>U</strong>sability, <strong>R</strong>eliability, <strong>P</strong>erformance, <strong>S</strong>upportability. It is an industry-standard model for capturing both what a system does (functional) and how well it does it (non-functional). Using FURPS demonstrates a thorough understanding of the business context required for a Distinction.
+    </div>
+
+    <div class="card">
+      <div class="card-title">F — Functional Requirements</div>
+      <div class="two-col">
+        <div>
+          <p style="font-size:12px;font-weight:700;color:var(--green-deep);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Admin Stock Tracking Module</p>
+          <table class="data-table" style="margin-bottom:0;font-size:12px;">
+            <thead><tr><th>Ref</th><th>Requirement</th><th>Priority</th></tr></thead>
+            <tbody>
+              <tr><td>F-S1</td><td>Admin can create a new batch record with a unique batch code, linked producer, quantity received, and expiry date</td><td><span class="badge-pass">MUST</span></td></tr>
+              <tr><td>F-S2</td><td>Every product must be linked to exactly one batch at any time; the system enforces this via a NOT NULL foreign key</td><td><span class="badge-pass">MUST</span></td></tr>
+              <tr><td>F-S3</td><td>When an order is placed, stock_qty is automatically decremented and the batch_id is recorded against each order_item for full traceability</td><td><span class="badge-pass">MUST</span></td></tr>
+              <tr><td>F-S4</td><td>Admin dashboard displays a low-stock alert for any product with stock_qty below a configurable threshold (default: 5)</td><td><span class="badge-tbd">SHOULD</span></td></tr>
+              <tr><td>F-S5</td><td>Admin can view a full audit trail: given an order ID, trace back through order_items → products → batches → producer</td><td><span class="badge-pass">MUST</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <p style="font-size:12px;font-weight:700;color:var(--green-deep);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Loyalty Scheme Module</p>
+          <table class="data-table" style="margin-bottom:0;font-size:12px;">
+            <thead><tr><th>Ref</th><th>Requirement</th><th>Priority</th></tr></thead>
+            <tbody>
+              <tr><td>F-L1</td><td>System stores a cumulative_spend value per user, incremented by the order total_price on every successful order</td><td><span class="badge-pass">MUST</span></td></tr>
+              <tr><td>F-L2</td><td>Discount tiers are: Bronze (£25 → 5%), Silver (£75 → 10%), Gold (£150 → 20%) applied as a percentage reduction to the checkout total</td><td><span class="badge-pass">MUST</span></td></tr>
+              <tr><td>F-L3</td><td>Discount is calculated server-side in PHP only — discount_rate is never passed from client to server</td><td><span class="badge-pass">MUST</span></td></tr>
+              <tr><td>F-L4</td><td>User dashboard displays current tier, amount spent, and progress to next tier via a visual progress bar</td><td><span class="badge-tbd">SHOULD</span></td></tr>
+              <tr><td>F-L5</td><td>Discount applied is recorded in orders.discount_applied for financial reporting purposes</td><td><span class="badge-pass">MUST</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">U — Usability Requirements</div>
+      <table class="data-table" style="margin-bottom:0;">
+        <thead><tr><th>Ref</th><th>Requirement</th><th>Standard / Heuristic</th></tr></thead>
+        <tbody>
+          <tr><td>U-1</td><td><strong>Learnability:</strong> A new user with no prior experience should be able to register, browse products, and add an item to their basket within 5 minutes without assistance</td><td>Nielsen Heuristic #6 — Recognition over recall</td></tr>
+          <tr><td>U-2</td><td><strong>Feedback:</strong> Every user action (add to basket, submit post, place order) must produce visible confirmation feedback within 1 second. Error messages must be specific and actionable (not generic "Error occurred")</td><td>Nielsen Heuristic #1 — Visibility of system status</td></tr>
+          <tr><td>U-3</td><td><strong>Consistency:</strong> Navigation, button styles, colour scheme (green/white), typography (Playfair Display / DM Sans) and interactive element behaviour must be consistent across all pages</td><td>Nielsen Heuristic #4 — Consistency and standards</td></tr>
+          <tr><td>U-4</td><td><strong>Accessibility:</strong> Must conform to WCAG 2.1 Level AA — minimum contrast ratio 4.5:1, all images have alt text, all forms have labels, keyboard navigation fully supported, ARIA landmarks on all major regions</td><td>WCAG 2.1 AA (UK legal requirement for public-facing services)</td></tr>
+          <tr><td>U-5</td><td><strong>Responsiveness:</strong> Layout must adapt correctly to screen widths of 320px (small mobile), 768px (tablet), and 1280px (desktop) without horizontal scrolling or content overflow</td><td>Mobile-first responsive design</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">R — Reliability Requirements</div>
+        <table class="data-table" style="margin-bottom:0;font-size:12px;">
+          <thead><tr><th>Ref</th><th>Requirement</th></tr></thead>
+          <tbody>
+            <tr><td>R-1</td><td>The system must handle failed order placements gracefully — if stock decrement fails (e.g. concurrent purchase), the order must not be confirmed and the user must be notified</td></tr>
+            <tr><td>R-2</td><td>Database transactions (MySQL) must be used for the checkout process to ensure atomicity — either all of (insert order, insert order_items, decrement stock, update cumulative_spend) succeed, or none do</td></tr>
+            <tr><td>R-3</td><td>Session expiry of 30 minutes inactivity must be enforced to reduce risk of session hijacking on shared devices</td></tr>
+            <tr><td>R-4</td><td>All form validation must be performed both client-side (JavaScript, for UX) and server-side (PHP, for security). Client-side validation alone is insufficient</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">P — Performance Requirements</div>
+        <table class="data-table" style="margin-bottom:0;font-size:12px;">
+          <thead><tr><th>Ref</th><th>Requirement</th></tr></thead>
+          <tbody>
+            <tr><td>P-1</td><td>All pages must achieve a Google Lighthouse performance score of ≥ 70, ensuring acceptable load times across the target user base</td></tr>
+            <tr><td>P-2</td><td>Product catalogue page must load in ≤ 3 seconds on a standard UK broadband connection (≥ 10 Mbps)</td></tr>
+            <tr><td>P-3</td><td>Database queries must use indexed columns (e.g. email in users, producer_id in products) to prevent full-table scans as the dataset grows</td></tr>
+            <tr><td>P-4</td><td>Images must be compressed (WebP format recommended) and served at appropriate dimensions to reduce payload size</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">S — Supportability Requirements</div>
+      <table class="data-table" style="margin-bottom:0;">
+        <thead><tr><th>Ref</th><th>Requirement</th><th>Implementation</th></tr></thead>
+        <tbody>
+          <tr><td>S-1</td><td><strong>Maintainability:</strong> Code must be easily maintainable by a third-party developer unfamiliar with the project</td><td>Consistent snake_case naming conventions throughout. All functions and classes have docblock comments. Code separated into logical modules (auth.php, db.php, loyalty.php)</td></tr>
+          <tr><td>S-2</td><td><strong>Configurability:</strong> Loyalty thresholds and discount rates must be stored as named constants, not magic numbers, so they can be changed without modifying business logic</td><td><code>define('LOYALTY_BRONZE_THRESHOLD', 25);</code> in config.php</td></tr>
+          <tr><td>S-3</td><td><strong>Extensibility:</strong> The database schema and PHP modules must be designed to allow future features (e.g. a subscription box, a mobile app API) without requiring a full rebuild</td><td>Normalised relational schema. RESTful URL structure (/api/products, /api/orders) enables future API development</td></tr>
+          <tr><td>S-4</td><td><strong>Testability:</strong> Business logic (loyalty calculation, stock decrement) must be isolated in separate PHP functions so they can be unit tested independently of the UI</td><td>calculateDiscount($userId, $basketTotal) function in loyalty.php — testable with known inputs</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loyalty Decomposition -->
+    <div class="card">
+      <div class="card-title">Loyalty Scheme — Full IPO Decomposition</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Distinction requires comprehensive decomposition of complex processes into distinct Inputs, Processes, and Outputs. The loyalty discount calculation is the most algorithmically significant process in the system.</p>
+      <div class="grid-3">
+        <div style="background:var(--green-tint);border:1px solid var(--border);border-radius:8px;padding:16px;">
+          <p style="font-size:11px;font-weight:700;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">📥 INPUTS</p>
+          <ul style="list-style:none;font-size:12.5px;line-height:2;">
+            <li>→ <code>userID</code> (INT) — identifies the customer</li>
+            <li>→ <code>basketTotal</code> (DECIMAL) — current order value before discount</li>
+            <li>→ <code>cumulative_spend</code> (DECIMAL) — fetched from DB: total historically spent by this user</li>
+            <li>→ Loyalty tier constants: £25, £75, £150</li>
+            <li>→ Discount rate constants: 5%, 10%, 20%</li>
+          </ul>
+        </div>
+        <div style="background:var(--green-pale);border:1px solid var(--border);border-radius:8px;padding:16px;">
+          <p style="font-size:11px;font-weight:700;color:var(--green-mid);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">⚙️ PROCESSES</p>
+          <ul style="list-style:none;font-size:12.5px;line-height:2;">
+            <li>1. Query DB for user's cumulative_spend</li>
+            <li>2. Compare spend against tier thresholds (nested IF)</li>
+            <li>3. Assign discountRate based on highest qualifying tier</li>
+            <li>4. Calculate: discountAmount = basketTotal × discountRate</li>
+            <li>5. Calculate: finalTotal = basketTotal − discountAmount</li>
+            <li>6. Round finalTotal to 2 decimal places (currency)</li>
+            <li>7. On order success: increment cumulative_spend by basketTotal</li>
+            <li>8. Update loyalty_tier field in users table</li>
+          </ul>
+        </div>
+        <div style="background:#f0f8ff;border:1px solid #c8dff0;border-radius:8px;padding:16px;">
+          <p style="font-size:11px;font-weight:700;color:#2a6096;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">📤 OUTPUTS</p>
+          <ul style="list-style:none;font-size:12.5px;line-height:2;">
+            <li>← <code>tierLabel</code> (STRING) — displayed to user</li>
+            <li>← <code>discountRate</code> (DECIMAL) — e.g. 0.05</li>
+            <li>← <code>discountAmount</code> (DECIMAL) — e.g. £0.93</li>
+            <li>← <code>finalTotal</code> (DECIMAL) — charged at checkout</li>
+            <li>← Updated <code>cumulative_spend</code> in DB</li>
+            <li>← Updated <code>loyalty_tier</code> in DB</li>
+            <li>← <code>discount_applied</code> stored in orders table</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end requirements -->
+
+
+
+  <div class="section" id="wireframes">
+    <div class="section-header">
+      <div class="section-number">2</div>
       <div>
         <div class="section-title">Interface / UI Wireframes</div>
         <div class="section-subtitle">Page-by-page wireframes with Page Specification annotations and navigation hierarchy</div>
@@ -1270,7 +1538,7 @@
   ══════════════════════════════════════════════════════════ -->
   <div class="section" id="algorithms">
     <div class="section-header">
-      <div class="section-number">2</div>
+      <div class="section-number">3</div>
       <div>
         <div class="section-title">Algorithms</div>
         <div class="section-subtitle">Pseudocode and flowcharts for key system processes using standard conventions</div>
@@ -1571,7 +1839,7 @@
   ══════════════════════════════════════════════════════════ -->
   <div class="section" id="data">
     <div class="section-header">
-      <div class="section-number">3</div>
+      <div class="section-number">4</div>
       <div>
         <div class="section-title">Data Requirements &amp; Data Dictionary</div>
         <div class="section-subtitle">Variables, data types, constraints and naming conventions for all database tables</div>
@@ -1718,7 +1986,7 @@
   ══════════════════════════════════════════════════════════ -->
   <div class="section" id="erd">
     <div class="section-header">
-      <div class="section-number">4</div>
+      <div class="section-number">5</div>
       <div>
         <div class="section-title">Entity-Relationship Diagram (ERD)</div>
         <div class="section-subtitle">Relationships between all major database entities</div>
@@ -1810,7 +2078,7 @@
   ══════════════════════════════════════════════════════════ -->
   <div class="section" id="testing">
     <div class="section-header">
-      <div class="section-number">5</div>
+      <div class="section-number">6</div>
       <div>
         <div class="section-title">Test Strategy</div>
         <div class="section-subtitle">Testing approach, component order, test types and initial test plan for Greenfield Local Hub</div>
@@ -1943,6 +2211,169 @@
     </div>
 
   </div><!-- end testing -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 6: SECURITY CONTROLS (NEW — DISTINCTION)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section" id="security">
+    <div class="section-header">
+      <div class="section-number">7</div>
+      <div>
+        <div class="section-title">Security Controls &amp; CIA Framework</div>
+        <div class="section-subtitle">Exact PHP/SQL procedures ensuring Confidentiality, Integrity, and Availability</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>CIA Triad:</strong> Every security measure below is mapped to one or more of the three core security aims — <strong>Confidentiality</strong> (data is only accessible to authorised users), <strong>Integrity</strong> (data is accurate and untampered), and <strong>Availability</strong> (the system remains accessible to legitimate users).
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">1 — Password Hashing (Confidentiality)</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Passwords must <strong>never</strong> be stored as plain text. PHP's <code>password_hash()</code> uses the bcrypt algorithm, which applies a salt and a cost factor making brute-force attacks computationally expensive.</p>
+        <div class="pseudo" style="font-size:11px;"><span class="cmt">// REGISTRATION: Hash password before storing</span>
+<span class="var">$password</span> = $_POST[<span class="str">'password'</span>];
+<span class="var">$hash</span> = <span class="kw">password_hash</span>(<span class="var">$password</span>, PASSWORD_BCRYPT, [
+    <span class="str">'cost'</span> => 12  <span class="cmt">// Higher = slower = more secure</span>
+]);
+<span class="cmt">// Store $hash in DB, never $password</span>
+
+<span class="cmt">// LOGIN: Verify against stored hash</span>
+<span class="kw">if</span> (<span class="kw">password_verify</span>(<span class="var">$inputPassword</span>, <span class="var">$storedHash</span>)) {
+    <span class="cmt">// Grant access</span>
+} <span class="kw">else</span> {
+    <span class="cmt">// Increment failed attempts</span>
+}</div>
+        <div class="tag-list" style="margin-top:10px;"><span class="tag dark">Confidentiality</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2 — Prepared Statements (Integrity)</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">SQL Injection is one of the most dangerous vulnerabilities (OWASP Top 10). Prepared statements separate SQL logic from user data — the DB driver handles escaping, so malicious input like <code>admin' OR '1'='1</code> is treated as literal data, not SQL code.</p>
+        <div class="pseudo" style="font-size:11px;"><span class="cmt">// UNSAFE — never do this:</span>
+<span class="var">$sql</span> = <span class="str">"SELECT * FROM users WHERE email='$email'"</span>;
+
+<span class="cmt">// SAFE — prepared statement with PDO:</span>
+<span class="var">$stmt</span> = <span class="var">$pdo</span>->prepare(
+    <span class="str">"SELECT id, password_hash, role
+     FROM users WHERE email = ? AND is_active = 1"</span>
+);
+<span class="var">$stmt</span>->execute([<span class="var">$email</span>]);
+<span class="var">$user</span> = <span class="var">$stmt</span>->fetch(PDO::FETCH_ASSOC);</div>
+        <div class="tag-list" style="margin-top:10px;"><span class="tag dark">Integrity</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">3 — Input Validation &amp; XSS Prevention (Integrity)</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Cross-Site Scripting (XSS) allows attackers to inject scripts into pages viewed by other users. All output must be sanitised. User-submitted content (noticeboard posts, forum comments) is especially vulnerable.</p>
+        <div class="pseudo" style="font-size:11px;"><span class="cmt">// Validate email format server-side</span>
+<span class="var">$email</span> = filter_var($_POST[<span class="str">'email'</span>], FILTER_VALIDATE_EMAIL);
+<span class="kw">if</span> (!<span class="var">$email</span>) { die(<span class="str">"Invalid email"</span>); }
+
+<span class="cmt">// Strip HTML tags from text inputs</span>
+<span class="var">$name</span> = strip_tags(trim($_POST[<span class="str">'name'</span>]));
+
+<span class="cmt">// Encode output before displaying to browser</span>
+<span class="kw">echo</span> htmlspecialchars(<span class="var">$userInput</span>, ENT_QUOTES, <span class="str">'UTF-8'</span>);
+<span class="cmt">// Converts < > " ' & to HTML entities</span></div>
+        <div class="tag-list" style="margin-top:10px;"><span class="tag dark">Integrity</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">4 — CSRF Protection (Integrity)</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Cross-Site Request Forgery tricks authenticated users into unknowingly submitting malicious requests. A unique CSRF token is generated per session and validated on every state-changing form submission (login, order, post).</p>
+        <div class="pseudo" style="font-size:11px;"><span class="cmt">// Generate token on page load</span>
+<span class="kw">if</span> (empty($_SESSION[<span class="str">'csrf_token'</span>])) {
+    $_SESSION[<span class="str">'csrf_token'</span>] = bin2hex(random_bytes(32));
+}
+
+<span class="cmt">// Embed in form as hidden field</span>
+<span class="str">&lt;input type="hidden" name="csrf_token"
+  value="&lt;?= $_SESSION['csrf_token'] ?&gt;"&gt;</span>
+
+<span class="cmt">// Validate on form submission</span>
+<span class="kw">if</span> (!hash_equals($_SESSION[<span class="str">'csrf_token'</span>],
+                  $_POST[<span class="str">'csrf_token'</span>])) {
+    die(<span class="str">"CSRF validation failed"</span>);
+}</div>
+        <div class="tag-list" style="margin-top:10px;"><span class="tag dark">Integrity</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">5 — Role-Based Access Control (Confidentiality)</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Every admin page must verify the user's role on <em>every page load</em> — not just at login. A user who has their session cookie stolen must not be able to access admin features.</p>
+        <div class="pseudo" style="font-size:11px;"><span class="cmt">// auth_check.php — included at top of every admin page</span>
+session_start();
+
+<span class="kw">if</span> (!isset($_SESSION[<span class="str">'user_id'</span>]) ||
+    $_SESSION[<span class="str">'role'</span>] !== <span class="str">'admin'</span>) {
+    header(<span class="str">'Location: /login.php?error=unauthorised'</span>);
+    exit; <span class="cmt">// exit() CRITICAL — stops page rendering</span>
+}
+
+<span class="cmt">// Session timeout — auto-logout after 30 mins idle</span>
+<span class="kw">if</span> (isset($_SESSION[<span class="str">'last_active'</span>]) &&
+    (time() - $_SESSION[<span class="str">'last_active'</span>] > 1800)) {
+    session_destroy();
+    header(<span class="str">'Location: /login.php?error=timeout'</span>);
+    exit;
+}
+$_SESSION[<span class="str">'last_active'</span>] = time();</div>
+        <div class="tag-list" style="margin-top:10px;"><span class="tag dark">Confidentiality</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">6 — Brute Force &amp; DoS Protection (Availability)</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Without rate limiting, attackers can attempt thousands of password combinations per second. A lockout system combined with HTTPS and secure headers protects availability and confidentiality.</p>
+        <div class="pseudo" style="font-size:11px;"><span class="cmt">// Check failed attempts before processing login</span>
+<span class="var">$stmt</span> = <span class="var">$pdo</span>->prepare(
+    <span class="str">"SELECT failed_attempts, locked_until
+     FROM users WHERE email = ?"</span>
+);
+<span class="var">$stmt</span>->execute([<span class="var">$email</span>]);
+<span class="var">$row</span> = <span class="var">$stmt</span>->fetch();
+
+<span class="kw">if</span> (<span class="var">$row</span>[<span class="str">'locked_until'</span>] > date(<span class="str">'Y-m-d H:i:s'</span>)) {
+    die(<span class="str">"Account locked. Try again later."</span>);
+}
+<span class="kw">if</span> (<span class="var">$row</span>[<span class="str">'failed_attempts'</span>] >= 5) {
+    <span class="cmt">// Lock account for 15 minutes</span>
+    <span class="var">$unlock</span> = date(<span class="str">'Y-m-d H:i:s'</span>, strtotime(<span class="str">'+15 min'</span>));
+    <span class="var">$pdo</span>->prepare(<span class="str">"UPDATE users SET locked_until=? WHERE email=?"</span>)
+        ->execute([<span class="var">$unlock</span>, <span class="var">$email</span>]);
+}</div>
+        <div class="tag-list" style="margin-top:10px;"><span class="tag dark">Availability</span><span class="tag dark">Confidentiality</span></div>
+      </div>
+    </div>
+
+    <!-- HTTPS / Headers -->
+    <div class="card">
+      <div class="card-title">7 — HTTPS &amp; Secure HTTP Headers</div>
+      <div class="grid-2" style="margin-top:4px;">
+        <div>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;">HTTPS encrypts all data in transit using TLS, preventing man-in-the-middle attacks. Secure headers add an additional layer of protection in the browser.</p>
+          <div class="pseudo" style="font-size:11px;"><span class="cmt">// Set in PHP or .htaccess</span>
+header(<span class="str">'Strict-Transport-Security: max-age=31536000'</span>);
+header(<span class="str">'X-Content-Type-Options: nosniff'</span>);
+header(<span class="str">'X-Frame-Options: DENY'</span>);
+header(<span class="str">'Content-Security-Policy: default-src self'</span>);
+header(<span class="str">'Referrer-Policy: strict-origin-when-cross-origin'</span>);</div>
+        </div>
+        <table class="data-table" style="margin-bottom:0;font-size:11.5px;">
+          <thead><tr><th>Header</th><th>Protection Against</th><th>CIA</th></tr></thead>
+          <tbody>
+            <tr><td>HSTS</td><td>Protocol downgrade attacks</td><td>Confidentiality</td></tr>
+            <tr><td>X-Frame-Options</td><td>Clickjacking</td><td>Integrity</td></tr>
+            <tr><td>CSP</td><td>XSS / code injection</td><td>Integrity</td></tr>
+            <tr><td>X-Content-Type</td><td>MIME-type sniffing</td><td>Integrity</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- end security -->
 
 </div><!-- end container -->
 
