@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 1b – Greenfield Local Hub Design Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #1a3a2a;
+    --green-mid: #2d6a4f;
+    --green-bright: #40916c;
+    --green-light: #74c69d;
+    --green-pale: #d8f3dc;
+    --green-tint: #f0faf3;
+    --white: #ffffff;
+    --off-white: #f8fdf9;
+    --gray-100: #f1f5f2;
+    --gray-200: #e2e8e4;
+    --gray-400: #94a89b;
+    --gray-600: #4d6357;
+    --gray-800: #2a3d32;
+    --accent: #b7e4c7;
+    --warn: #e9c46a;
+    --danger: #e76f51;
+    --text: #1c2e24;
+    --text-muted: #5a7262;
+    --border: #c8dfd0;
+    --shadow: 0 2px 12px rgba(26,58,42,0.08);
+    --shadow-md: 0 4px 24px rgba(26,58,42,0.12);
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--green-deep);
+    color: white;
+    padding: 48px 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(64,145,108,0.25) 0%, transparent 70%);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 200px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(116,198,157,0.15) 0%, transparent 70%);
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(116,198,157,0.2);
+    border: 1px solid rgba(116,198,157,0.4);
+    color: var(--green-light);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  header h1 span { color: var(--green-light); }
+  header p {
+    color: rgba(255,255,255,0.65);
+    font-size: 15px;
+    max-width: 600px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .header-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .header-meta-item .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--green-light);
+    font-family: 'DM Mono', monospace;
+  }
+  .header-meta-item .value {
+    font-size: 14px;
+    color: white;
+    font-weight: 500;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--green-mid);
+    padding: 0 60px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  nav a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  nav a:hover {
+    color: white;
+    border-bottom-color: var(--green-light);
+    background: rgba(255,255,255,0.05);
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-top: 60px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--green-pale);
+  }
+  .section-number {
+    width: 36px; height: 36px;
+    background: var(--green-mid);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--green-deep);
+  }
+  .section-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--green-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    width: 3px; height: 16px;
+    background: var(--green-bright);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* ── WIREFRAME ── */
+  .wireframe-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+  .wireframe-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--green-bright);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .wireframe-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .wf {
+    border: 2px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--gray-100);
+    font-size: 11px;
+  }
+  .wf-bar {
+    background: var(--green-deep);
+    color: white;
+    padding: 6px 12px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .wf-nav {
+    background: var(--green-mid);
+    padding: 5px 12px;
+    display: flex;
+    gap: 10px;
+  }
+  .wf-nav span {
+    color: rgba(255,255,255,0.8);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .wf-nav span.active {
+    background: rgba(255,255,255,0.2);
+    color: white;
+  }
+  .wf-body { padding: 12px; }
+  .wf-hero {
+    background: linear-gradient(135deg, var(--green-pale), var(--accent));
+    border-radius: 6px;
+    padding: 16px 12px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: var(--green-deep);
+  }
+  .wf-hero h3 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .wf-hero p { font-size: 9px; color: var(--gray-600); }
+  .wf-hero .wf-btn { margin-top: 8px; }
+  .wf-btn {
+    display: inline-block;
+    background: var(--green-mid);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .wf-btn.outline {
+    background: transparent;
+    border: 1px solid var(--green-mid);
+    color: var(--green-mid);
+  }
+  .wf-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--green-deep);
+    margin: 10px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .wf-product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+  .wf-product-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 5px;
+    padding: 8px;
+    text-align: center;
+  }
+  .wf-product-img {
+    width: 100%; height: 36px;
+    background: var(--green-pale);
+    border-radius: 3px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .wf-product-name { font-size: 9px; font-weight: 600; color: var(--text); }
+  .wf-product-price { font-size: 9px; color: var(--green-bright); font-weight: 700; }
+  .wf-input {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 9px;
+    color: var(--gray-400);
+    margin-bottom: 6px;
+    width: 100%;
+  }
+  .wf-label { font-size: 9px; color: var(--gray-600); margin-bottom: 2px; font-weight: 600; }
+  .wf-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .wf-tag {
+    background: var(--green-pale);
+    color: var(--green-deep);
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 8px;
+    font-weight: 600;
+  }
+  .wf-divider { border: none; border-top: 1px solid var(--gray-200); margin: 8px 0; }
+  .wf-footer {
+    background: var(--green-deep);
+    color: rgba(255,255,255,0.5);
+    padding: 8px 12px;
+    font-size: 8px;
+    text-align: center;
+  }
+  .wf-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 8px; }
+  .wf-table th {
+    background: var(--green-pale);
+    color: var(--green-deep);
+    padding: 4px 6px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 8px;
+    text-transform: uppercase;
+  }
+  .wf-table td { padding: 4px 6px; border-bottom: 1px solid var(--gray-200); color: var(--gray-600); }
+  .wf-loyalty-bar {
+    background: var(--gray-100);
+    border-radius: 5px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+  }
+  .wf-progress {
+    background: var(--gray-200);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 4px 0;
+  }
+  .wf-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green-bright), var(--green-light));
+    border-radius: 3px;
+  }
+  .wf-stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+  .wf-stat {
+    background: var(--green-pale);
+    border-radius: 5px;
+    padding: 6px;
+    text-align: center;
+  }
+  .wf-stat .num { font-size: 14px; font-weight: 700; color: var(--green-deep); }
+  .wf-stat .lbl { font-size: 8px; color: var(--gray-600); }
+
+  /* Page Spec */
+  .spec-box {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-size: 12px;
+  }
+  .spec-box h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-mid);
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+  .spec-section { margin-bottom: 12px; }
+  .spec-section strong { display: block; font-size: 10px; color: var(--green-deep); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.05em; }
+  .spec-section ul { list-style: none; padding: 0; }
+  .spec-section li { padding: 2px 0 2px 12px; position: relative; color: var(--gray-600); font-size: 11px; }
+  .spec-section li::before { content: '→'; position: absolute; left: 0; color: var(--green-bright); font-size: 9px; top: 3px; }
+
+  /* ── ALGORITHM BOXES ── */
+  .algo-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .algo-header {
+    background: var(--green-deep);
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .algo-header h4 { font-size: 13px; font-weight: 600; }
+  .algo-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: rgba(255,255,255,0.15);
+    padding: 3px 10px;
+    border-radius: 10px;
+    color: var(--green-light);
+  }
+  .algo-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .algo-pseudo {
+    padding: 20px;
+    border-right: 1px solid var(--border);
+  }
+  .algo-pseudo-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-bright);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .pseudo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.8;
+    color: var(--text);
+    background: var(--gray-100);
+    padding: 14px;
+    border-radius: 6px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .pseudo .kw { color: #2d6a4f; font-weight: 600; }
+  .pseudo .cmt { color: #94a89b; font-style: italic; }
+  .pseudo .str { color: #e76f51; }
+  .pseudo .var { color: #264653; }
+  .algo-flowchart { padding: 20px; }
+  .algo-flowchart-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-bright);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .flowchart { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .fc-node {
+    padding: 8px 16px;
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+    max-width: 180px;
+    width: 100%;
+    position: relative;
+  }
+  .fc-start, .fc-end {
+    background: var(--green-deep);
+    color: white;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .fc-process {
+    background: var(--green-pale);
+    border: 2px solid var(--green-bright);
+    color: var(--green-deep);
+    border-radius: 4px;
+  }
+  .fc-decision {
+    background: var(--warn);
+    border: 2px solid #d4a017;
+    color: #3d2b00;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .fc-io {
+    background: #e8f4fd;
+    border: 2px solid #6baed6;
+    color: #1a4a6b;
+    border-radius: 4px;
+    font-style: italic;
+  }
+  .fc-arrow {
+    width: 2px;
+    height: 14px;
+    background: var(--gray-400);
+    position: relative;
+    margin: 0 auto;
+  }
+  .fc-arrow::after {
+    content: '▼';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--gray-400);
+  }
+  .fc-branch {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    width: 100%;
+  }
+  .fc-branch-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+  }
+  .fc-branch-label {
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    color: var(--gray-600);
+    padding: 2px 0;
+  }
+
+  /* ── DATA DICTIONARY ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-bottom: 20px;
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .data-table thead tr {
+    background: var(--green-deep);
+    color: white;
+  }
+  .data-table thead th {
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .data-table tbody tr:nth-child(even) { background: var(--green-tint); }
+  .data-table tbody tr:hover { background: var(--green-pale); }
+  .data-table td { padding: 9px 14px; border-bottom: 1px solid var(--gray-200); color: var(--text); }
+  .data-table td:first-child { font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--green-mid); font-weight: 500; }
+  .type-badge {
+    display: inline-block;
+    background: var(--green-pale);
+    color: var(--green-deep);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .pk-badge {
+    display: inline-block;
+    background: var(--green-mid);
+    color: white;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .fk-badge {
+    display: inline-block;
+    background: var(--warn);
+    color: #3d2b00;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ERD ── */
+  .erd-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .erd-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    min-width: 600px;
+  }
+  .erd-entity {
+    border: 2px solid var(--green-bright);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 11px;
+  }
+  .erd-entity-header {
+    background: var(--green-mid);
+    color: white;
+    padding: 7px 12px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 0.04em;
+  }
+  .erd-attr {
+    padding: 4px 12px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: white;
+  }
+  .erd-attr:last-child { border-bottom: none; }
+  .erd-attr.pk { background: #f0faf3; font-weight: 700; color: var(--green-deep); }
+  .erd-attr.fk { background: #fffdf0; }
+  .erd-rel {
+    grid-column: 1 / -1;
+    background: var(--gray-100);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 11px;
+    color: var(--gray-600);
+  }
+  .erd-rel-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-mid);
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 8px;
+  }
+  .erd-rel-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+  }
+  .erd-rel-card {
+    background: var(--green-pale);
+    color: var(--green-deep);
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 10px;
+  }
+
+  /* ── TEST STRATEGY ── */
+  .test-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .test-header {
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .test-header.white { background: var(--green-pale); }
+  .test-header.black { background: #2d2d2d; }
+  .test-header h4 { font-size: 14px; font-weight: 700; }
+  .test-header.white h4 { color: var(--green-deep); }
+  .test-header.black h4 { color: white; }
+  .test-body { padding: 0; }
+  .test-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 1fr;
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 12px;
+  }
+  .test-row:last-child { border-bottom: none; }
+  .test-row-label {
+    background: var(--green-tint);
+    padding: 10px 14px;
+    font-weight: 600;
+    color: var(--green-deep);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--border);
+  }
+  .test-row-val {
+    padding: 10px 14px;
+    color: var(--text);
+    border-right: 1px solid var(--border);
+  }
+  .test-row-val:last-child { border-right: none; }
+
+  .test-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .test-table thead tr { background: var(--green-mid); color: white; }
+  .test-table thead th { padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; text-align: left; }
+  .test-table tbody tr:nth-child(even) { background: var(--green-tint); }
+  .test-table td { padding: 9px 12px; border-bottom: 1px solid var(--gray-200); }
+  .badge-pass { background: #d4edda; color: #1a5e2e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .badge-fail { background: #f8d7da; color: #721c24; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .badge-tbd { background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+
+  /* ── MISC ── */
+  .info-box {
+    background: var(--green-tint);
+    border-left: 4px solid var(--green-bright);
+    padding: 14px 18px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 13px;
+    color: var(--gray-800);
+    margin-bottom: 20px;
+  }
+  .info-box strong { color: var(--green-deep); }
+
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .tag {
+    background: var(--green-pale);
+    color: var(--green-deep);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .tag.dark { background: var(--green-mid); color: white; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  footer {
+    background: var(--green-deep);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 24px 40px;
+    font-size: 12px;
+    margin-top: 60px;
+  }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  @media print {
+    nav { display: none; }
+    .section { break-inside: avoid; }
+  }
+
+  @media (max-width: 768px) {
+    header { padding: 32px 24px 28px; }
+    header h1 { font-size: 28px; }
+    nav { padding: 0 16px; }
+    .container { padding: 0 20px 60px; }
+    .grid-2, .two-col, .algo-body, .wireframe-grid { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .test-row { grid-template-columns: 1fr; }
+    .erd-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-badge">T Level Digital Production, Design & Development</div>
+  <h1>Task 1b — <span>Design Document</span></h1>
+  <p>Greenfield Local Hub — A community co-operative web platform connecting local farmers, producers and residents.</p>
+  <div class="header-meta">
+    <div class="header-meta-item"><span class="label">Project</span><span class="value">Greenfield Local Hub</span></div>
+    <div class="header-meta-item"><span class="label">Task</span><span class="value">1b — Designing the Solution</span></div>
+    <div class="header-meta-item"><span class="label">Stack</span><span class="value">HTML / CSS / JS · PHP · MySQL</span></div>
+    <div class="header-meta-item"><span class="label">Document</span><span class="value">Wireframes · Algorithms · Data · Testing</span></div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a href="#wireframes">1. Wireframes</a>
+  <a href="#algorithms">2. Algorithms</a>
+  <a href="#data">3. Data Requirements</a>
+  <a href="#erd">4. ERD</a>
+  <a href="#testing">5. Test Strategy</a>
+</nav>
+
+<div class="container">
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 1: WIREFRAMES
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section" id="wireframes">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <div>
+        <div class="section-title">Interface / UI Wireframes</div>
+        <div class="section-subtitle">Page-by-page wireframes with Page Specification annotations and navigation hierarchy</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Navigation Hierarchy:</strong> Home → [Browse Products | Producers | Events | Noticeboard] | [Login / Register] → User Dashboard [Basket, Loyalty, Posts] | Admin Dashboard [Products, Stock, Users, Reports, Events]
+    </div>
+
+    <!-- 1.1 Homepage -->
+    <div class="wireframe-wrap">
+      <div class="wireframe-label">Page 1 — Homepage (Guest / Public View)</div>
+      <div class="wireframe-grid">
+        <div class="wf">
+          <div class="wf-bar"><span>🌿 Greenfield Local Hub</span><span>greenfield.local</span></div>
+          <div class="wf-nav">
+            <span class="active">Home</span><span>Shop</span><span>Producers</span><span>Events</span><span>Noticeboard</span><span>Login</span>
+          </div>
+          <div class="wf-body">
+            <div class="wf-hero">
+              <h3>🌱 Fresh from your local co-op</h3>
+              <p>Supporting Greenfield farmers & producers since 2024</p>
+              <div style="margin-top:6px; display:flex; gap:6px; justify-content:center;">
+                <span class="wf-btn">Shop Now</span>
+                <span class="wf-btn outline">Our Producers</span>
+              </div>
+            </div>
+            <div class="wf-section-title">Featured Products</div>
+            <div class="wf-product-grid">
+              <div class="wf-product-card"><div class="wf-product-img">🥛</div><div class="wf-product-name">Whole Milk 2L</div><div class="wf-product-price">£1.80</div></div>
+              <div class="wf-product-card"><div class="wf-product-img">🧀</div><div class="wf-product-name">Cheddar 400g</div><div class="wf-product-price">£3.50</div></div>
+              <div class="wf-product-card"><div class="wf-product-img">🍓</div><div class="wf-product-name">Strawberries 300g</div><div class="wf-product-price">£2.20</div></div>
+              <div class="wf-product-card"><div class="wf-product-img">🍞</div><div class="wf-product-name">Sourdough Loaf</div><div class="wf-product-price">£3.00</div></div>
+            </div>
+            <div class="wf-section-title">Upcoming Events</div>
+            <div style="background:var(--green-pale);border-radius:4px;padding:6px 8px;font-size:9px;margin-bottom:6px;">📅 <strong>Farmers Market</strong> — 15 Apr 2025, 9am–2pm</div>
+            <div style="background:var(--green-pale);border-radius:4px;padding:6px 8px;font-size:9px;">📅 <strong>Community Harvest Day</strong> — 22 Apr 2025</div>
+          </div>
+          <div class="wf-footer">© 2025 Greenfield Local Hub · Accessibility · Privacy Policy · Contact</div>
+        </div>
+        <div class="spec-box">
+          <h4>Page Specification — Homepage</h4>
+          <div class="spec-section">
+            <strong>Interface</strong>
+            <ul>
+              <li>Font: Playfair Display (headings) + DM Sans (body)</li>
+              <li>Colours: Green (#2d6a4f) primary, White (#fff) background</li>
+              <li>Mobile-responsive layout (flexbox/grid)</li>
+              <li>High-contrast text (WCAG AA compliant)</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Navigation</strong>
+            <ul>
+              <li>Sticky top navigation bar</li>
+              <li>Links: Home, Shop, Producers, Events, Noticeboard</li>
+              <li>Login / Register (right-aligned)</li>
+              <li>Hamburger menu on mobile</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Page Elements</strong>
+            <ul>
+              <li>Hero banner with CTA buttons: Shop Now, Our Producers</li>
+              <li>Product grid — 4 featured items (image, name, price)</li>
+              <li>Upcoming Events section (date, title)</li>
+              <li>Footer: copyright, links, accessibility</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Accessibility</strong>
+            <ul>
+              <li>ARIA labels on all nav links and buttons</li>
+              <li>Alt text on all product images</li>
+              <li>Skip-to-content link for keyboard users</li>
+              <li>Sufficient colour contrast ratio ≥ 4.5:1</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.2 Product Shop -->
+    <div class="wireframe-wrap">
+      <div class="wireframe-label">Page 2 — Product Shop / Browse</div>
+      <div class="wireframe-grid">
+        <div class="wf">
+          <div class="wf-bar"><span>🌿 Greenfield</span><span>Shop</span></div>
+          <div class="wf-nav"><span class="active">Shop</span><span>Producers</span><span>Events</span><span>Noticeboard</span></div>
+          <div class="wf-body">
+            <div class="wf-section-title">Browse Products</div>
+            <div class="wf-row">
+              <div class="wf-input" style="flex:1;">🔍 Search products…</div>
+              <span class="wf-btn" style="white-space:nowrap;">Filter ▾</span>
+            </div>
+            <div class="wf-row">
+              <span class="wf-tag">All</span><span class="wf-tag">Dairy</span><span class="wf-tag">Bakery</span><span class="wf-tag">Produce</span><span class="wf-tag">Meat</span>
+            </div>
+            <hr class="wf-divider">
+            <div class="wf-product-grid">
+              <div class="wf-product-card"><div class="wf-product-img">🥛</div><div class="wf-product-name">Whole Milk 2L</div><div class="wf-product-price">£1.80</div><div style="font-size:8px;color:#94a89b;">Greenfield Farm</div><span class="wf-btn" style="font-size:8px;margin-top:4px;display:inline-block;">Add to Basket</span></div>
+              <div class="wf-product-card"><div class="wf-product-img">🥚</div><div class="wf-product-name">Free Range Eggs x12</div><div class="wf-product-price">£2.90</div><div style="font-size:8px;color:#94a89b;">Hillside Hens</div><span class="wf-btn" style="font-size:8px;margin-top:4px;display:inline-block;">Add to Basket</span></div>
+              <div class="wf-product-card"><div class="wf-product-img">🧈</div><div class="wf-product-name">Salted Butter 250g</div><div class="wf-product-price">£2.10</div><div style="font-size:8px;color:#94a89b;">Meadow Dairy</div><span class="wf-btn" style="font-size:8px;margin-top:4px;display:inline-block;">Add to Basket</span></div>
+              <div class="wf-product-card"><div class="wf-product-img">🍎</div><div class="wf-product-name">Mixed Apples 1kg</div><div class="wf-product-price">£1.60</div><div style="font-size:8px;color:#94a89b;">Valley Orchard</div><span class="wf-btn" style="font-size:8px;margin-top:4px;display:inline-block;">Add to Basket</span></div>
+            </div>
+            <div style="text-align:center;font-size:9px;color:var(--gray-400);margin-top:4px;">Showing 1–4 of 24 products</div>
+          </div>
+          <div class="wf-footer">© 2025 Greenfield Local Hub</div>
+        </div>
+        <div class="spec-box">
+          <h4>Page Specification — Shop</h4>
+          <div class="spec-section">
+            <strong>Interface</strong>
+            <ul>
+              <li>Responsive product grid (2-col mobile, 4-col desktop)</li>
+              <li>Search bar with live filtering (JavaScript)</li>
+              <li>Category filter tabs (All / Dairy / Bakery / Produce / Meat)</li>
+              <li>Pagination — 12 products per page</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Product Card Elements</strong>
+            <ul>
+              <li>Product image (alt text required)</li>
+              <li>Product name, price, producer name</li>
+              <li>Stock indicator (in stock / low stock / out)</li>
+              <li>"Add to Basket" button (requires login for checkout)</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Security</strong>
+            <ul>
+              <li>Basket requires authenticated session</li>
+              <li>CSRF token on all POST requests</li>
+              <li>Input sanitised server-side (PHP)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.3 Login / Register -->
+    <div class="wireframe-wrap">
+      <div class="wireframe-label">Page 3 — Login / Register</div>
+      <div class="wireframe-grid">
+        <div class="wf">
+          <div class="wf-bar"><span>🌿 Greenfield</span><span>Account</span></div>
+          <div class="wf-nav"><span>Home</span><span>Shop</span><span class="active">Login</span></div>
+          <div class="wf-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+              <span class="wf-btn" style="text-align:center;display:block;">Login</span>
+              <span class="wf-btn outline" style="text-align:center;display:block;">Register</span>
+            </div>
+            <div class="wf-label">Email Address</div>
+            <div class="wf-input">user@example.com</div>
+            <div class="wf-label">Password</div>
+            <div class="wf-input">••••••••••</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <div style="font-size:9px;color:var(--gray-600);">☐ Remember me</div>
+              <div style="font-size:9px;color:var(--green-bright);cursor:pointer;">Forgot password?</div>
+            </div>
+            <span class="wf-btn" style="display:block;text-align:center;padding:7px;">Sign In →</span>
+            <hr class="wf-divider">
+            <div style="font-size:9px;text-align:center;color:var(--gray-600);">🔒 Secured with HTTPS · Brute-force protection active</div>
+            <div style="font-size:9px;text-align:center;color:var(--gray-400);margin-top:3px;">After 5 failed attempts, account is temporarily locked</div>
+          </div>
+          <div class="wf-footer">© 2025 Greenfield Local Hub</div>
+        </div>
+        <div class="spec-box">
+          <h4>Page Specification — Login / Register</h4>
+          <div class="spec-section">
+            <strong>Login Form Fields</strong>
+            <ul>
+              <li>Email address (type="email", required)</li>
+              <li>Password (type="password", min 8 chars)</li>
+              <li>Remember me (checkbox)</li>
+              <li>Forgot password link → reset flow</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Register Form Fields</strong>
+            <ul>
+              <li>Full name, email, password, confirm password</li>
+              <li>Address (for delivery/loyalty tracking)</li>
+              <li>GDPR consent checkbox (required)</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Security Measures</strong>
+            <ul>
+              <li>Passwords hashed with bcrypt (PHP password_hash)</li>
+              <li>Brute-force lockout after 5 failed attempts</li>
+              <li>CSRF token on form submission</li>
+              <li>Prepared statements (PDO) prevent SQL injection</li>
+              <li>HTTPS enforced site-wide</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Validation</strong>
+            <ul>
+              <li>Client-side: JS regex for email, password strength</li>
+              <li>Server-side: PHP filter_var, htmlspecialchars</li>
+              <li>Error messages: generic ("Invalid credentials") to prevent enumeration</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.4 User Dashboard + Loyalty -->
+    <div class="wireframe-wrap">
+      <div class="wireframe-label">Page 4 — User Dashboard (Logged-in View, incl. Loyalty Scheme)</div>
+      <div class="wireframe-grid">
+        <div class="wf">
+          <div class="wf-bar"><span>🌿 Greenfield</span><span>👤 Jane D. ▾</span></div>
+          <div class="wf-nav"><span>Shop</span><span>Producers</span><span>Events</span><span class="active">Dashboard</span><span>Basket (3)</span></div>
+          <div class="wf-body">
+            <div style="font-size:11px;font-weight:700;color:var(--green-deep);margin-bottom:8px;">Welcome back, Jane 👋</div>
+            <div class="wf-loyalty-bar">
+              <div style="display:flex;justify-content:space-between;font-size:9px;font-weight:700;">
+                <span>🏅 Loyalty Status</span><span style="color:var(--green-bright);">£62.40 spent</span>
+              </div>
+              <div class="wf-progress"><div class="wf-progress-fill" style="width:83%;"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--gray-600);margin-top:2px;">
+                <span>£25 → 5% ✓</span><span>£75 → 10% (£12.60 away)</span><span>£150 → 20%</span>
+              </div>
+              <div style="font-size:9px;color:var(--green-deep);margin-top:4px;font-weight:600;">Current discount: <span style="color:var(--green-bright);">5% OFF</span> applied at checkout</div>
+            </div>
+            <div class="wf-section-title">Recent Orders</div>
+            <table class="wf-table">
+              <thead><tr><th>Order</th><th>Date</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>#1042</td><td>04 Apr</td><td>£14.20</td><td>✅ Delivered</td></tr>
+                <tr><td>#1031</td><td>28 Mar</td><td>£9.80</td><td>✅ Delivered</td></tr>
+              </tbody>
+            </table>
+            <div class="wf-section-title">My Noticeboard Posts</div>
+            <div style="background:var(--green-pale);border-radius:4px;padding:6px 8px;font-size:9px;">📌 <strong>Community Litter Pick</strong> — posted 2 days ago</div>
+          </div>
+          <div class="wf-footer">© 2025 Greenfield Local Hub</div>
+        </div>
+        <div class="spec-box">
+          <h4>Page Specification — User Dashboard</h4>
+          <div class="spec-section">
+            <strong>Loyalty Scheme Display</strong>
+            <ul>
+              <li>Total cumulative spend shown</li>
+              <li>Progress bar to next discount tier</li>
+              <li>Tiers: £25 → 5%, £75 → 10%, £150 → 20%</li>
+              <li>Current active discount clearly highlighted</li>
+              <li>Discount auto-applied at checkout (PHP session)</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Order History</strong>
+            <ul>
+              <li>Order ID, date, total, delivery status</li>
+              <li>Link to view full order details</li>
+              <li>Pagination if more than 5 orders</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>My Posts</strong>
+            <ul>
+              <li>List of user's noticeboard/forum posts</li>
+              <li>Edit and delete own posts</li>
+              <li>Status badge (approved / pending)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.5 Admin Dashboard -->
+    <div class="wireframe-wrap">
+      <div class="wireframe-label">Page 5 — Admin Dashboard</div>
+      <div class="wireframe-grid">
+        <div class="wf">
+          <div class="wf-bar"><span>🌿 Greenfield ADMIN</span><span>⚙ Admin ▾</span></div>
+          <div class="wf-nav">
+            <span class="active">Overview</span><span>Products</span><span>Stock</span><span>Users</span><span>Events</span><span>Reports</span><span>Noticeboard</span>
+          </div>
+          <div class="wf-body">
+            <div class="wf-stat-row">
+              <div class="wf-stat"><div class="num">142</div><div class="lbl">Products</div></div>
+              <div class="wf-stat"><div class="num">89</div><div class="lbl">Users</div></div>
+              <div class="wf-stat"><div class="num">£2,840</div><div class="lbl">Sales (MTD)</div></div>
+            </div>
+            <div class="wf-section-title">Low Stock Alerts</div>
+            <table class="wf-table">
+              <thead><tr><th>Product</th><th>Producer</th><th>Batch</th><th>Stock</th></tr></thead>
+              <tbody>
+                <tr><td>Whole Milk 2L</td><td>Greenfield Farm</td><td>B-2042</td><td style="color:var(--danger);font-weight:700;">3 left</td></tr>
+                <tr><td>Sourdough Loaf</td><td>Hillside Bakery</td><td>B-1891</td><td style="color:var(--warn);font-weight:700;">7 left</td></tr>
+              </tbody>
+            </table>
+            <div class="wf-section-title">Pending Noticeboard Approvals</div>
+            <div style="background:var(--green-pale);border-radius:4px;padding:6px 8px;font-size:9px;display:flex;justify-content:space-between;">
+              <span>📌 "Community garden meeting" — by John S.</span>
+              <span><span class="wf-btn" style="font-size:7px;padding:2px 6px;background:var(--green-bright);">✓ Approve</span></span>
+            </div>
+          </div>
+          <div class="wf-footer">ADMIN PANEL — Greenfield Local Hub © 2025</div>
+        </div>
+        <div class="spec-box">
+          <h4>Page Specification — Admin Dashboard</h4>
+          <div class="spec-section">
+            <strong>Access Control</strong>
+            <ul>
+              <li>Role-based: admin session verified on every admin page load</li>
+              <li>Non-admin users redirected to homepage (PHP header redirect)</li>
+              <li>All admin actions logged with timestamp and user ID</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Overview Stats</strong>
+            <ul>
+              <li>Total products, active users, monthly sales</li>
+              <li>Low stock alerts (threshold configurable)</li>
+              <li>Pending noticeboard posts for approval</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Stock Tracing</strong>
+            <ul>
+              <li>Each product linked to producer (farm/business)</li>
+              <li>Batch/lot number assigned at product creation</li>
+              <li>Quantity decremented on each purchase (MySQL trigger or PHP logic)</li>
+              <li>Full audit trail: batch → product → order</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Admin Sub-Pages</strong>
+            <ul>
+              <li>Products: Add / Edit / Delete with image upload</li>
+              <li>Stock: View batch numbers, quantities, producer links</li>
+              <li>Users: View, edit roles, deactivate accounts</li>
+              <li>Events: Create/manage events and bookings</li>
+              <li>Reports: Loyalty spend, sales by producer, user activity</li>
+              <li>Noticeboard: Approve / reject user posts</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.6 Checkout -->
+    <div class="wireframe-wrap">
+      <div class="wireframe-label">Page 6 — Basket & Checkout</div>
+      <div class="wireframe-grid">
+        <div class="wf">
+          <div class="wf-bar"><span>🌿 Greenfield</span><span>Checkout</span></div>
+          <div class="wf-nav"><span>Shop</span><span class="active">Basket (3)</span></div>
+          <div class="wf-body">
+            <div class="wf-section-title">Your Basket</div>
+            <table class="wf-table">
+              <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
+              <tbody>
+                <tr><td>Whole Milk 2L</td><td>2</td><td>£3.60</td></tr>
+                <tr><td>Free Range Eggs x12</td><td>1</td><td>£2.90</td></tr>
+                <tr><td>Sourdough Loaf</td><td>1</td><td>£3.00</td></tr>
+              </tbody>
+            </table>
+            <div style="background:var(--green-pale);border-radius:4px;padding:6px 8px;font-size:9px;margin-bottom:6px;">
+              🏅 <strong>Loyalty discount applied: 5% OFF</strong><br>
+              Subtotal: £9.50 → <strong style="color:var(--green-bright);">£9.02 (saving £0.48)</strong>
+            </div>
+            <div class="wf-label">Delivery Address</div>
+            <div class="wf-input">12 Greenfield Lane, GF1 2AB</div>
+            <div class="wf-label">Payment Method</div>
+            <div class="wf-input">💳 Card ending in 4242</div>
+            <span class="wf-btn" style="display:block;text-align:center;padding:7px;margin-top:8px;">Place Order →</span>
+            <div style="font-size:8px;text-align:center;color:var(--gray-400);margin-top:4px;">🔒 Secured payment · HTTPS</div>
+          </div>
+          <div class="wf-footer">© 2025 Greenfield Local Hub</div>
+        </div>
+        <div class="spec-box">
+          <h4>Page Specification — Checkout</h4>
+          <div class="spec-section">
+            <strong>Basket Logic</strong>
+            <ul>
+              <li>Items stored in PHP session</li>
+              <li>Quantity update / remove item functionality</li>
+              <li>Stock check before order placed (prevent overselling)</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Loyalty Discount</strong>
+            <ul>
+              <li>Cumulative spend fetched from DB (users table)</li>
+              <li>Discount auto-calculated in PHP before total displayed</li>
+              <li>Discount tier displayed clearly to user</li>
+              <li>Spend updated in DB after successful order</li>
+            </ul>
+          </div>
+          <div class="spec-section">
+            <strong>Security</strong>
+            <ul>
+              <li>CSRF token on checkout form</li>
+              <li>Server-side price validation (never trust client prices)</li>
+              <li>Payment processed via secure gateway (not stored in DB)</li>
+              <li>Order confirmation email sent on success</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end wireframes -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 2: ALGORITHMS
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section" id="algorithms">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <div>
+        <div class="section-title">Algorithms</div>
+        <div class="section-subtitle">Pseudocode and flowcharts for key system processes using standard conventions</div>
+      </div>
+    </div>
+
+    <!-- ALGO 1: User Login -->
+    <div class="algo-wrap">
+      <div class="algo-header">
+        <h4>Algorithm 1 — User Login &amp; Authentication</h4>
+        <span class="algo-type">SEQUENCE · SELECTION</span>
+      </div>
+      <div class="algo-body">
+        <div class="algo-pseudo">
+          <div class="algo-pseudo-label">Pseudocode</div>
+          <div class="pseudo"><span class="cmt">// Algorithm: User Login</span>
+<span class="cmt">// Inputs: email, password</span>
+<span class="cmt">// Outputs: session token OR error message</span>
+
+<span class="kw">BEGIN</span> UserLogin
+
+  <span class="cmt">// Step 1: Receive and sanitise inputs</span>
+  <span class="var">email</span> ← INPUT(email_field)
+  <span class="var">password</span> ← INPUT(password_field)
+  <span class="var">email</span> ← SANITISE(<span class="var">email</span>)
+
+  <span class="cmt">// Step 2: Validate format</span>
+  <span class="kw">IF</span> NOT IsValidEmail(<span class="var">email</span>) <span class="kw">THEN</span>
+    OUTPUT <span class="str">"Invalid email format"</span>
+    <span class="kw">STOP</span>
+  <span class="kw">END IF</span>
+
+  <span class="cmt">// Step 3: Check failed attempt count</span>
+  <span class="var">attempts</span> ← GetFailedAttempts(<span class="var">email</span>)
+  <span class="kw">IF</span> <span class="var">attempts</span> &gt;= 5 <span class="kw">THEN</span>
+    OUTPUT <span class="str">"Account temporarily locked"</span>
+    <span class="kw">STOP</span>
+  <span class="kw">END IF</span>
+
+  <span class="cmt">// Step 4: Query database (prepared stmt)</span>
+  <span class="var">userRecord</span> ← DB_QUERY(
+    <span class="str">"SELECT id, password_hash, role
+     FROM users WHERE email = ?"</span>,
+    [<span class="var">email</span>]
+  )
+
+  <span class="cmt">// Step 5: Verify password hash</span>
+  <span class="kw">IF</span> <span class="var">userRecord</span> EXISTS <span class="kw">AND</span>
+     VerifyHash(<span class="var">password</span>, <span class="var">userRecord</span>.password_hash) <span class="kw">THEN</span>
+    ResetFailedAttempts(<span class="var">email</span>)
+    CreateSession(<span class="var">userRecord</span>.id, <span class="var">userRecord</span>.role)
+    <span class="kw">IF</span> <span class="var">userRecord</span>.role = <span class="str">"admin"</span> <span class="kw">THEN</span>
+      REDIRECT(<span class="str">"/admin/dashboard"</span>)
+    <span class="kw">ELSE</span>
+      REDIRECT(<span class="str">"/user/dashboard"</span>)
+    <span class="kw">END IF</span>
+  <span class="kw">ELSE</span>
+    IncrementFailedAttempts(<span class="var">email</span>)
+    OUTPUT <span class="str">"Invalid credentials"</span>
+  <span class="kw">END IF</span>
+
+<span class="kw">END</span> UserLogin</div>
+        </div>
+        <div class="algo-flowchart">
+          <div class="algo-flowchart-label">Flowchart</div>
+          <div class="flowchart">
+            <div class="fc-node fc-start">START</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-io">INPUT email, password</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">Sanitise inputs</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">Valid email format?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">Attempts ≥ 5?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">Query DB (prepared stmt)</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">User found AND hash matches?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">Role = admin?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">Create session, redirect</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-end">END</div>
+          </div>
+          <div style="margin-top:12px;padding:8px 10px;background:var(--gray-100);border-radius:6px;font-size:10px;color:var(--gray-600);">
+            <strong style="color:var(--green-mid);">Legend:</strong>
+            <span style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;"><span style="background:var(--green-pale);border:1.5px solid var(--green-bright);padding:1px 6px;border-radius:3px;font-size:9px;">Process</span></span>
+            <span style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;"><span style="background:var(--warn);border:1.5px solid #d4a017;padding:1px 6px;border-radius:3px;font-size:9px;">Decision</span></span>
+            <span style="display:inline-flex;align-items:center;gap:4px;margin-left:8px;"><span style="background:#e8f4fd;border:1.5px solid #6baed6;padding:1px 6px;border-radius:3px;font-size:9px;font-style:italic;">Input/Output</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALGO 2: Loyalty Discount -->
+    <div class="algo-wrap">
+      <div class="algo-header">
+        <h4>Algorithm 2 — Loyalty Discount Calculation</h4>
+        <span class="algo-type">SEQUENCE · SELECTION</span>
+      </div>
+      <div class="algo-body">
+        <div class="algo-pseudo">
+          <div class="algo-pseudo-label">Pseudocode</div>
+          <div class="pseudo"><span class="cmt">// Algorithm: Calculate Loyalty Discount</span>
+<span class="cmt">// Inputs: userID, basketTotal</span>
+<span class="cmt">// Outputs: discountRate, finalTotal</span>
+
+<span class="kw">CONSTANT</span> TIER_1_THRESHOLD ← 25
+<span class="kw">CONSTANT</span> TIER_2_THRESHOLD ← 75
+<span class="kw">CONSTANT</span> TIER_3_THRESHOLD ← 150
+<span class="kw">CONSTANT</span> TIER_1_RATE ← 0.05
+<span class="kw">CONSTANT</span> TIER_2_RATE ← 0.10
+<span class="kw">CONSTANT</span> TIER_3_RATE ← 0.20
+
+<span class="kw">BEGIN</span> CalculateDiscount(<span class="var">userID</span>, <span class="var">basketTotal</span>)
+
+  <span class="cmt">// Fetch user's cumulative spend from DB</span>
+  <span class="var">totalSpend</span> ← DB_QUERY(
+    <span class="str">"SELECT cumulative_spend FROM users WHERE id = ?"</span>,
+    [<span class="var">userID</span>]
+  )
+
+  <span class="cmt">// Determine discount tier</span>
+  <span class="kw">IF</span> <span class="var">totalSpend</span> &gt;= TIER_3_THRESHOLD <span class="kw">THEN</span>
+    <span class="var">discountRate</span> ← TIER_3_RATE
+    <span class="var">tierLabel</span> ← <span class="str">"Gold — 20% OFF"</span>
+  <span class="kw">ELSE IF</span> <span class="var">totalSpend</span> &gt;= TIER_2_THRESHOLD <span class="kw">THEN</span>
+    <span class="var">discountRate</span> ← TIER_2_RATE
+    <span class="var">tierLabel</span> ← <span class="str">"Silver — 10% OFF"</span>
+  <span class="kw">ELSE IF</span> <span class="var">totalSpend</span> &gt;= TIER_1_THRESHOLD <span class="kw">THEN</span>
+    <span class="var">discountRate</span> ← TIER_1_RATE
+    <span class="var">tierLabel</span> ← <span class="str">"Bronze — 5% OFF"</span>
+  <span class="kw">ELSE</span>
+    <span class="var">discountRate</span> ← 0
+    <span class="var">tierLabel</span> ← <span class="str">"No discount yet"</span>
+  <span class="kw">END IF</span>
+
+  <span class="cmt">// Apply discount to basket</span>
+  <span class="var">discountAmount</span> ← <span class="var">basketTotal</span> * <span class="var">discountRate</span>
+  <span class="var">finalTotal</span> ← <span class="var">basketTotal</span> - <span class="var">discountAmount</span>
+  <span class="var">finalTotal</span> ← ROUND(<span class="var">finalTotal</span>, 2)
+
+  OUTPUT <span class="var">tierLabel</span>, <span class="var">discountAmount</span>, <span class="var">finalTotal</span>
+  <span class="kw">RETURN</span> <span class="var">finalTotal</span>
+
+<span class="kw">END</span> CalculateDiscount</div>
+        </div>
+        <div class="algo-flowchart">
+          <div class="algo-flowchart-label">Flowchart</div>
+          <div class="flowchart">
+            <div class="fc-node fc-start">START</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-io">INPUT userID, basketTotal</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">Fetch cumulative_spend from DB</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">spend ≥ £150?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">spend ≥ £75?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">spend ≥ £25?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">Apply discountRate to basketTotal</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">finalTotal = basketTotal − discount</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-io">OUTPUT tierLabel, finalTotal</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-end">END</div>
+          </div>
+          <div style="margin-top:12px;padding:8px 10px;background:var(--gray-100);border-radius:6px;font-size:10px;color:var(--gray-600);">
+            <strong style="color:var(--green-mid);">Note:</strong> Constants defined at module level. ROUND(value, 2) ensures currency precision. Server-side only — discount rates never exposed to client.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALGO 3: Add to Basket / Stock Check -->
+    <div class="algo-wrap">
+      <div class="algo-header">
+        <h4>Algorithm 3 — Add Product to Basket (with Stock Check)</h4>
+        <span class="algo-type">SEQUENCE · SELECTION · ITERATION</span>
+      </div>
+      <div class="algo-body">
+        <div class="algo-pseudo">
+          <div class="algo-pseudo-label">Pseudocode</div>
+          <div class="pseudo"><span class="cmt">// Algorithm: Add to Basket</span>
+<span class="cmt">// Inputs: userID, productID, quantity</span>
+<span class="cmt">// Outputs: updated basket OR error</span>
+
+<span class="kw">BEGIN</span> AddToBasket(<span class="var">userID</span>, <span class="var">productID</span>, <span class="var">quantity</span>)
+
+  <span class="cmt">// Validate inputs</span>
+  <span class="kw">IF</span> <span class="var">quantity</span> &lt;= 0 <span class="kw">OR</span> NOT IsInteger(<span class="var">quantity</span>) <span class="kw">THEN</span>
+    OUTPUT <span class="str">"Invalid quantity"</span>
+    <span class="kw">STOP</span>
+  <span class="kw">END IF</span>
+
+  <span class="cmt">// Fetch product and current stock</span>
+  <span class="var">product</span> ← DB_QUERY(
+    <span class="str">"SELECT name, price, stock_qty, batch_id
+     FROM products WHERE id = ? AND active = 1"</span>,
+    [<span class="var">productID</span>]
+  )
+
+  <span class="kw">IF</span> <span class="var">product</span> NOT EXISTS <span class="kw">THEN</span>
+    OUTPUT <span class="str">"Product not found"</span>
+    <span class="kw">STOP</span>
+  <span class="kw">END IF</span>
+
+  <span class="cmt">// Check sufficient stock</span>
+  <span class="kw">IF</span> <span class="var">product</span>.stock_qty &lt; <span class="var">quantity</span> <span class="kw">THEN</span>
+    OUTPUT <span class="str">"Insufficient stock"</span>
+    <span class="kw">STOP</span>
+  <span class="kw">END IF</span>
+
+  <span class="cmt">// Check if already in basket (iterate)</span>
+  <span class="var">found</span> ← FALSE
+  <span class="kw">FOR EACH</span> <span class="var">item</span> IN SESSION.basket <span class="kw">DO</span>
+    <span class="kw">IF</span> <span class="var">item</span>.productID = <span class="var">productID</span> <span class="kw">THEN</span>
+      <span class="var">item</span>.quantity ← <span class="var">item</span>.quantity + <span class="var">quantity</span>
+      <span class="var">found</span> ← TRUE
+    <span class="kw">END IF</span>
+  <span class="kw">END FOR</span>
+
+  <span class="kw">IF NOT</span> <span class="var">found</span> <span class="kw">THEN</span>
+    AddToSession(<span class="var">productID</span>, <span class="var">product</span>.name,
+                 <span class="var">product</span>.price, <span class="var">quantity</span>)
+  <span class="kw">END IF</span>
+
+  OUTPUT <span class="str">"Item added to basket"</span>
+
+<span class="kw">END</span> AddToBasket</div>
+        </div>
+        <div class="algo-flowchart">
+          <div class="algo-flowchart-label">Flowchart</div>
+          <div class="flowchart">
+            <div class="fc-node fc-start">START</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-io">INPUT productID, quantity</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">quantity &gt; 0 AND integer?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">Fetch product from DB</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">Product exists?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">stock_qty ≥ quantity?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">FOR EACH item in basket</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-decision">productID in basket?</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-process">Update qty OR add new item to session</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-io">OUTPUT "Item added"</div>
+            <div class="fc-arrow"></div>
+            <div class="fc-node fc-end">END</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trace Table -->
+    <div class="card">
+      <div class="card-title">Trace Table — Algorithm 2 (Loyalty Discount)</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>totalSpend</th>
+            <th>basketTotal</th>
+            <th>discountRate</th>
+            <th>tierLabel</th>
+            <th>discountAmount</th>
+            <th>finalTotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Initialise</td><td>—</td><td>£18.50</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Fetch spend</td><td>£62.40</td><td>£18.50</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Check ≥150?</td><td>£62.40</td><td>£18.50</td><td>—</td><td>FALSE → continue</td><td>—</td><td>—</td></tr>
+          <tr><td>Check ≥75?</td><td>£62.40</td><td>£18.50</td><td>—</td><td>FALSE → continue</td><td>—</td><td>—</td></tr>
+          <tr><td>Check ≥25?</td><td>£62.40</td><td>£18.50</td><td>0.05</td><td>Bronze — 5% OFF</td><td>—</td><td>—</td></tr>
+          <tr><td>Calculate</td><td>£62.40</td><td>£18.50</td><td>0.05</td><td>Bronze — 5% OFF</td><td>£0.93</td><td>£17.57</td></tr>
+          <tr><td>Round &amp; output</td><td>£62.40</td><td>£18.50</td><td>0.05</td><td>Bronze — 5% OFF</td><td>£0.93</td><td>£17.57 ✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- end algorithms -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 3: DATA REQUIREMENTS
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section" id="data">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <div>
+        <div class="section-title">Data Requirements &amp; Data Dictionary</div>
+        <div class="section-subtitle">Variables, data types, constraints and naming conventions for all database tables</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Naming Conventions:</strong> All table names are snake_case plural (e.g. <code>users</code>, <code>order_items</code>). Column names are snake_case (e.g. <code>created_at</code>, <code>stock_qty</code>). Primary keys are always named <code>id</code>. Foreign keys follow the pattern <code>tablename_id</code> (e.g. <code>user_id</code>, <code>product_id</code>).
+    </div>
+
+    <!-- Users table -->
+    <div class="card-title" style="margin-bottom:8px;">Table: users</div>
+    <table class="data-table">
+      <thead><tr><th>Field</th><th>Data Type</th><th>Key</th><th>Constraints</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td><span class="type-badge">INT(11)</span></td><td><span class="pk-badge">PK</span></td><td>AUTO_INCREMENT, NOT NULL</td><td>Unique user identifier</td></tr>
+        <tr><td>full_name</td><td><span class="type-badge">VARCHAR(100)</span></td><td></td><td>NOT NULL</td><td>User's full name</td></tr>
+        <tr><td>email</td><td><span class="type-badge">VARCHAR(150)</span></td><td></td><td>UNIQUE, NOT NULL</td><td>Login email address</td></tr>
+        <tr><td>password_hash</td><td><span class="type-badge">VARCHAR(255)</span></td><td></td><td>NOT NULL</td><td>bcrypt hashed password</td></tr>
+        <tr><td>role</td><td><span class="type-badge">ENUM</span></td><td></td><td>'user','admin' DEFAULT 'user'</td><td>Access role (role-based access control)</td></tr>
+        <tr><td>cumulative_spend</td><td><span class="type-badge">DECIMAL(10,2)</span></td><td></td><td>DEFAULT 0.00</td><td>Total spend for loyalty tier calculation</td></tr>
+        <tr><td>loyalty_tier</td><td><span class="type-badge">ENUM</span></td><td></td><td>'none','bronze','silver','gold'</td><td>Current loyalty discount tier</td></tr>
+        <tr><td>failed_attempts</td><td><span class="type-badge">TINYINT</span></td><td></td><td>DEFAULT 0</td><td>Consecutive failed login counter</td></tr>
+        <tr><td>locked_until</td><td><span class="type-badge">DATETIME</span></td><td></td><td>NULLABLE</td><td>Account lockout expiry (brute-force protection)</td></tr>
+        <tr><td>is_active</td><td><span class="type-badge">TINYINT(1)</span></td><td></td><td>DEFAULT 1</td><td>Soft-delete / account suspension flag</td></tr>
+        <tr><td>created_at</td><td><span class="type-badge">DATETIME</span></td><td></td><td>DEFAULT NOW()</td><td>Account creation timestamp</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Products table -->
+    <div class="card-title" style="margin-bottom:8px;">Table: products</div>
+    <table class="data-table">
+      <thead><tr><th>Field</th><th>Data Type</th><th>Key</th><th>Constraints</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td><span class="type-badge">INT(11)</span></td><td><span class="pk-badge">PK</span></td><td>AUTO_INCREMENT, NOT NULL</td><td>Unique product identifier</td></tr>
+        <tr><td>name</td><td><span class="type-badge">VARCHAR(150)</span></td><td></td><td>NOT NULL</td><td>Product display name</td></tr>
+        <tr><td>description</td><td><span class="type-badge">TEXT</span></td><td></td><td>NULLABLE</td><td>Full product description</td></tr>
+        <tr><td>price</td><td><span class="type-badge">DECIMAL(8,2)</span></td><td></td><td>NOT NULL, > 0</td><td>Unit price in GBP</td></tr>
+        <tr><td>category_id</td><td><span class="type-badge">INT(11)</span></td><td><span class="fk-badge">FK</span></td><td>REFERENCES categories(id)</td><td>Product category (Dairy, Bakery, etc.)</td></tr>
+        <tr><td>producer_id</td><td><span class="type-badge">INT(11)</span></td><td><span class="fk-badge">FK</span></td><td>REFERENCES producers(id)</td><td>Linked local producer/farm</td></tr>
+        <tr><td>batch_id</td><td><span class="type-badge">INT(11)</span></td><td><span class="fk-badge">FK</span></td><td>REFERENCES batches(id)</td><td>Current stock batch (traceability)</td></tr>
+        <tr><td>stock_qty</td><td><span class="type-badge">INT(11)</span></td><td></td><td>NOT NULL, >= 0</td><td>Current available stock quantity</td></tr>
+        <tr><td>image_url</td><td><span class="type-badge">VARCHAR(255)</span></td><td></td><td>NULLABLE</td><td>Path to product image file</td></tr>
+        <tr><td>is_active</td><td><span class="type-badge">TINYINT(1)</span></td><td></td><td>DEFAULT 1</td><td>Whether product is visible on site</td></tr>
+        <tr><td>created_at</td><td><span class="type-badge">DATETIME</span></td><td></td><td>DEFAULT NOW()</td><td>Product listing creation timestamp</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Orders table -->
+    <div class="card-title" style="margin-bottom:8px;">Table: orders</div>
+    <table class="data-table">
+      <thead><tr><th>Field</th><th>Data Type</th><th>Key</th><th>Constraints</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td><span class="type-badge">INT(11)</span></td><td><span class="pk-badge">PK</span></td><td>AUTO_INCREMENT, NOT NULL</td><td>Unique order identifier</td></tr>
+        <tr><td>user_id</td><td><span class="type-badge">INT(11)</span></td><td><span class="fk-badge">FK</span></td><td>REFERENCES users(id)</td><td>Customer who placed the order</td></tr>
+        <tr><td>total_price</td><td><span class="type-badge">DECIMAL(10,2)</span></td><td></td><td>NOT NULL</td><td>Final order total (post-discount)</td></tr>
+        <tr><td>discount_applied</td><td><span class="type-badge">DECIMAL(5,2)</span></td><td></td><td>DEFAULT 0.00</td><td>Loyalty discount percentage used</td></tr>
+        <tr><td>status</td><td><span class="type-badge">ENUM</span></td><td></td><td>'pending','processing','delivered','cancelled'</td><td>Current order status</td></tr>
+        <tr><td>delivery_address</td><td><span class="type-badge">TEXT</span></td><td></td><td>NOT NULL</td><td>Delivery address (snapshot at order time)</td></tr>
+        <tr><td>created_at</td><td><span class="type-badge">DATETIME</span></td><td></td><td>DEFAULT NOW()</td><td>Order placement timestamp</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Batches table -->
+    <div class="card-title" style="margin-bottom:8px;">Table: batches (Stock Traceability)</div>
+    <table class="data-table">
+      <thead><tr><th>Field</th><th>Data Type</th><th>Key</th><th>Constraints</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td><span class="type-badge">INT(11)</span></td><td><span class="pk-badge">PK</span></td><td>AUTO_INCREMENT, NOT NULL</td><td>Unique batch identifier</td></tr>
+        <tr><td>batch_code</td><td><span class="type-badge">VARCHAR(50)</span></td><td></td><td>UNIQUE, NOT NULL</td><td>Human-readable batch reference (e.g. B-2042)</td></tr>
+        <tr><td>producer_id</td><td><span class="type-badge">INT(11)</span></td><td><span class="fk-badge">FK</span></td><td>REFERENCES producers(id)</td><td>Farm/producer this batch came from</td></tr>
+        <tr><td>quantity_received</td><td><span class="type-badge">INT(11)</span></td><td></td><td>NOT NULL</td><td>Total units received in this batch</td></tr>
+        <tr><td>quantity_remaining</td><td><span class="type-badge">INT(11)</span></td><td></td><td>NOT NULL</td><td>Current remaining stock in batch</td></tr>
+        <tr><td>received_date</td><td><span class="type-badge">DATE</span></td><td></td><td>NOT NULL</td><td>Date batch was received at hub</td></tr>
+        <tr><td>expiry_date</td><td><span class="type-badge">DATE</span></td><td></td><td>NULLABLE</td><td>Product expiry (for perishables)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Other tables brief -->
+    <div class="two-col">
+      <div>
+        <div class="card-title" style="margin-bottom:8px;">Table: producers</div>
+        <table class="data-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><span class="type-badge">INT</span></td><td><span class="pk-badge">PK</span></td></tr>
+            <tr><td>name</td><td><span class="type-badge">VARCHAR(150)</span></td><td>Farm/business name</td></tr>
+            <tr><td>description</td><td><span class="type-badge">TEXT</span></td><td>Marketing profile text</td></tr>
+            <tr><td>location</td><td><span class="type-badge">VARCHAR(200)</span></td><td>Farm address/region</td></tr>
+            <tr><td>image_url</td><td><span class="type-badge">VARCHAR(255)</span></td><td>Producer photo</td></tr>
+            <tr><td>is_active</td><td><span class="type-badge">TINYINT(1)</span></td><td>Visible on site?</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card-title" style="margin-bottom:8px;">Table: noticeboard_posts</div>
+        <table class="data-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><span class="type-badge">INT</span></td><td><span class="pk-badge">PK</span></td></tr>
+            <tr><td>user_id</td><td><span class="type-badge">INT</span></td><td><span class="fk-badge">FK</span> → users</td></tr>
+            <tr><td>title</td><td><span class="type-badge">VARCHAR(200)</span></td><td>Post title</td></tr>
+            <tr><td>body</td><td><span class="type-badge">TEXT</span></td><td>Post content (sanitised)</td></tr>
+            <tr><td>status</td><td><span class="type-badge">ENUM</span></td><td>'pending','approved','rejected'</td></tr>
+            <tr><td>created_at</td><td><span class="type-badge">DATETIME</span></td><td>Submission time</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card-title" style="margin-bottom:8px;">Table: events</div>
+        <table class="data-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><span class="type-badge">INT</span></td><td><span class="pk-badge">PK</span></td></tr>
+            <tr><td>title</td><td><span class="type-badge">VARCHAR(200)</span></td><td>Event name</td></tr>
+            <tr><td>description</td><td><span class="type-badge">TEXT</span></td><td>Event details</td></tr>
+            <tr><td>event_date</td><td><span class="type-badge">DATETIME</span></td><td>Date and time</td></tr>
+            <tr><td>max_capacity</td><td><span class="type-badge">INT</span></td><td>Max bookings allowed</td></tr>
+            <tr><td>created_by</td><td><span class="type-badge">INT</span></td><td><span class="fk-badge">FK</span> → users (admin)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card-title" style="margin-bottom:8px;">Table: order_items</div>
+        <table class="data-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><span class="type-badge">INT</span></td><td><span class="pk-badge">PK</span></td></tr>
+            <tr><td>order_id</td><td><span class="type-badge">INT</span></td><td><span class="fk-badge">FK</span> → orders</td></tr>
+            <tr><td>product_id</td><td><span class="type-badge">INT</span></td><td><span class="fk-badge">FK</span> → products</td></tr>
+            <tr><td>quantity</td><td><span class="type-badge">INT</span></td><td>Units ordered</td></tr>
+            <tr><td>unit_price</td><td><span class="type-badge">DECIMAL(8,2)</span></td><td>Price at time of order</td></tr>
+            <tr><td>batch_id</td><td><span class="type-badge">INT</span></td><td><span class="fk-badge">FK</span> → batches (traceability)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- end data -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 4: ERD
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section" id="erd">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <div>
+        <div class="section-title">Entity-Relationship Diagram (ERD)</div>
+        <div class="section-subtitle">Relationships between all major database entities</div>
+      </div>
+    </div>
+
+    <div class="erd-wrap">
+      <div class="erd-grid">
+        <!-- users -->
+        <div class="erd-entity">
+          <div class="erd-entity-header">USERS</div>
+          <div class="erd-attr pk"><span>🔑 id</span><span class="pk-badge">PK</span></div>
+          <div class="erd-attr"><span>full_name</span><span style="color:var(--gray-400);font-size:9px;">VARCHAR</span></div>
+          <div class="erd-attr"><span>email</span><span style="color:var(--gray-400);font-size:9px;">VARCHAR UNIQUE</span></div>
+          <div class="erd-attr"><span>password_hash</span><span style="color:var(--gray-400);font-size:9px;">VARCHAR</span></div>
+          <div class="erd-attr"><span>role</span><span style="color:var(--gray-400);font-size:9px;">ENUM</span></div>
+          <div class="erd-attr"><span>cumulative_spend</span><span style="color:var(--gray-400);font-size:9px;">DECIMAL</span></div>
+          <div class="erd-attr"><span>loyalty_tier</span><span style="color:var(--gray-400);font-size:9px;">ENUM</span></div>
+        </div>
+        <!-- products -->
+        <div class="erd-entity">
+          <div class="erd-entity-header">PRODUCTS</div>
+          <div class="erd-attr pk"><span>🔑 id</span><span class="pk-badge">PK</span></div>
+          <div class="erd-attr"><span>name</span><span style="color:var(--gray-400);font-size:9px;">VARCHAR</span></div>
+          <div class="erd-attr"><span>price</span><span style="color:var(--gray-400);font-size:9px;">DECIMAL</span></div>
+          <div class="erd-attr fk"><span>producer_id</span><span class="fk-badge">FK</span></div>
+          <div class="erd-attr fk"><span>category_id</span><span class="fk-badge">FK</span></div>
+          <div class="erd-attr fk"><span>batch_id</span><span class="fk-badge">FK</span></div>
+          <div class="erd-attr"><span>stock_qty</span><span style="color:var(--gray-400);font-size:9px;">INT</span></div>
+        </div>
+        <!-- producers -->
+        <div class="erd-entity">
+          <div class="erd-entity-header">PRODUCERS</div>
+          <div class="erd-attr pk"><span>🔑 id</span><span class="pk-badge">PK</span></div>
+          <div class="erd-attr"><span>name</span><span style="color:var(--gray-400);font-size:9px;">VARCHAR</span></div>
+          <div class="erd-attr"><span>description</span><span style="color:var(--gray-400);font-size:9px;">TEXT</span></div>
+          <div class="erd-attr"><span>location</span><span style="color:var(--gray-400);font-size:9px;">VARCHAR</span></div>
+          <div class="erd-attr"><span>image_url</span><span style="color:var(--gray-400);font-size:9px;">VARCHAR</span></div>
+        </div>
+        <!-- orders -->
+        <div class="erd-entity">
+          <div class="erd-entity-header">ORDERS</div>
+          <div class="erd-attr pk"><span>🔑 id</span><span class="pk-badge">PK</span></div>
+          <div class="erd-attr fk"><span>user_id</span><span class="fk-badge">FK</span></div>
+          <div class="erd-attr"><span>total_price</span><span style="color:var(--gray-400);font-size:9px;">DECIMAL</span></div>
+          <div class="erd-attr"><span>discount_applied</span><span style="color:var(--gray-400);font-size:9px;">DECIMAL</span></div>
+          <div class="erd-attr"><span>status</span><span style="color:var(--gray-400);font-size:9px;">ENUM</span></div>
+          <div class="erd-attr"><span>created_at</span><span style="color:var(--gray-400);font-size:9px;">DATETIME</span></div>
+        </div>
+        <!-- order_items -->
+        <div class="erd-entity">
+          <div class="erd-entity-header">ORDER_ITEMS</div>
+          <div class="erd-attr pk"><span>🔑 id</span><span class="pk-badge">PK</span></div>
+          <div class="erd-attr fk"><span>order_id</span><span class="fk-badge">FK</span></div>
+          <div class="erd-attr fk"><span>product_id</span><span class="fk-badge">FK</span></div>
+          <div class="erd-attr fk"><span>batch_id</span><span class="fk-badge">FK</span></div>
+          <div class="erd-attr"><span>quantity</span><span style="color:var(--gray-400);font-size:9px;">INT</span></div>
+          <div class="erd-attr"><span>unit_price</span><span style="color:var(--gray-400);font-size:9px;">DECIMAL</span></div>
+        </div>
+        <!-- batches -->
+        <div class="erd-entity">
+          <div class="erd-entity-header">BATCHES</div>
+          <div class="erd-attr pk"><span>🔑 id</span><span class="pk-badge">PK</span></div>
+          <div class="erd-attr"><span>batch_code</span><span style="color:var(--gray-400);font-size:9px;">VARCHAR UNIQUE</span></div>
+          <div class="erd-attr fk"><span>producer_id</span><span class="fk-badge">FK</span></div>
+          <div class="erd-attr"><span>quantity_received</span><span style="color:var(--gray-400);font-size:9px;">INT</span></div>
+          <div class="erd-attr"><span>quantity_remaining</span><span style="color:var(--gray-400);font-size:9px;">INT</span></div>
+          <div class="erd-attr"><span>expiry_date</span><span style="color:var(--gray-400);font-size:9px;">DATE</span></div>
+        </div>
+
+        <!-- Relationships summary -->
+        <div class="erd-rel" style="grid-column: 1 / -1;">
+          <div class="erd-rel-title">Relationships</div>
+          <div class="erd-rel-item"><span class="erd-rel-card">1</span><span>USERS</span><span>→</span><span class="erd-rel-card">MANY</span><span>ORDERS</span><span style="color:var(--gray-400);font-size:10px;">(one user can have many orders)</span></div>
+          <div class="erd-rel-item"><span class="erd-rel-card">1</span><span>ORDERS</span><span>→</span><span class="erd-rel-card">MANY</span><span>ORDER_ITEMS</span><span style="color:var(--gray-400);font-size:10px;">(one order contains many line items)</span></div>
+          <div class="erd-rel-item"><span class="erd-rel-card">1</span><span>PRODUCTS</span><span>→</span><span class="erd-rel-card">MANY</span><span>ORDER_ITEMS</span><span style="color:var(--gray-400);font-size:10px;">(one product can appear in many orders)</span></div>
+          <div class="erd-rel-item"><span class="erd-rel-card">1</span><span>PRODUCERS</span><span>→</span><span class="erd-rel-card">MANY</span><span>PRODUCTS</span><span style="color:var(--gray-400);font-size:10px;">(one producer supplies many products)</span></div>
+          <div class="erd-rel-item"><span class="erd-rel-card">1</span><span>PRODUCERS</span><span>→</span><span class="erd-rel-card">MANY</span><span>BATCHES</span><span style="color:var(--gray-400);font-size:10px;">(one producer delivers many batches)</span></div>
+          <div class="erd-rel-item"><span class="erd-rel-card">1</span><span>BATCHES</span><span>→</span><span class="erd-rel-card">MANY</span><span>PRODUCTS</span><span style="color:var(--gray-400);font-size:10px;">(one batch can contain multiple product types)</span></div>
+          <div class="erd-rel-item"><span class="erd-rel-card">1</span><span>USERS</span><span>→</span><span class="erd-rel-card">MANY</span><span>NOTICEBOARD_POSTS</span><span style="color:var(--gray-400);font-size:10px;">(one user can post many notices)</span></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end erd -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 5: TEST STRATEGY
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section" id="testing">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <div>
+        <div class="section-title">Test Strategy</div>
+        <div class="section-subtitle">Testing approach, component order, test types and initial test plan for Greenfield Local Hub</div>
+      </div>
+    </div>
+
+    <!-- White Box -->
+    <div class="test-card">
+      <div class="test-header white">
+        <h4>⬜ White Box Testing</h4>
+        <span style="font-size:12px;color:var(--green-mid);font-weight:600;">Developer-led · Internal Logic</span>
+      </div>
+      <div class="test-body">
+        <div class="test-row"><div class="test-row-label">Purpose</div><div class="test-row-val" style="grid-column:2/4;">Tests the internal code structure. Every conditional branch, loop and function is tested to ensure the code itself works correctly (not just inputs/outputs). Developer tests their own code during development.</div></div>
+        <div class="test-row"><div class="test-row-label">Who Performs</div><div class="test-row-val" style="grid-column:2/4;">Developer (student)</div></div>
+        <div class="test-row"><div class="test-row-label">Test Data</div><div class="test-row-val" style="grid-column:2/4;">All possible input combinations, including boundary values. Each path through every conditional (IF/ELSE, WHILE, FOR) exercised at least once.</div></div>
+        <div class="test-row"><div class="test-row-label">Test Criteria</div><div class="test-row-val" style="grid-column:2/4;">Output matches programmer's intended logic for every input. All branches covered.</div></div>
+        <div class="test-row"><div class="test-row-label">When</div><div class="test-row-val" style="grid-column:2/4;">Throughout development — after each module/function is written, before integration.</div></div>
+        <div class="test-row"><div class="test-row-label">Est. Time</div><div class="test-row-val" style="grid-column:2/4;">~30 min per module; full white-box pass ~2–3 hours total.</div></div>
+      </div>
+    </div>
+
+    <!-- Black Box -->
+    <div class="test-card">
+      <div class="test-header black">
+        <h4>⬛ Black Box Testing</h4>
+        <span style="font-size:12px;color:#aaa;font-weight:600;">Input/Output based · User perspective</span>
+      </div>
+      <div class="test-body">
+        <div class="test-row"><div class="test-row-label">Purpose</div><div class="test-row-val" style="grid-column:2/4;">Tests system behaviour from the user's perspective without knowledge of internal code. Verifies that given an input, the correct output/behaviour is produced as defined in the requirements.</div></div>
+        <div class="test-row"><div class="test-row-label">Who Performs</div><div class="test-row-val" style="grid-column:2/4;">Developer and selected test users (residents, community members)</div></div>
+        <div class="test-row"><div class="test-row-label">Test Data</div><div class="test-row-val" style="grid-column:2/4;">Valid, valid extreme, invalid, invalid extreme, and erroneous data for all user inputs.</div></div>
+        <div class="test-row"><div class="test-row-label">Test Criteria</div><div class="test-row-val" style="grid-column:2/4;">System behaves as per specification. Correct success/error messages shown. No data corruption.</div></div>
+        <div class="test-row"><div class="test-row-label">When</div><div class="test-row-val" style="grid-column:2/4;">After each feature is complete and after full system integration.</div></div>
+        <div class="test-row"><div class="test-row-label">Est. Time</div><div class="test-row-val" style="grid-column:2/4;">~1 hour per major feature; full black-box pass ~4–5 hours.</div></div>
+      </div>
+    </div>
+
+    <!-- Component Testing Order -->
+    <div class="card">
+      <div class="card-title">Component Testing Order</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Components are tested in dependency order — foundational modules first, integrated features after.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">1</span>
+          <div><strong>Database connection &amp; schema</strong> — Verify MySQL connection, all tables created, FK constraints work correctly</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">2</span>
+          <div><strong>User registration &amp; login</strong> — Password hashing, input validation, brute-force lockout, CSRF tokens, session creation</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">3</span>
+          <div><strong>Role-based access control</strong> — Admin pages redirect non-admins; user pages require login; session expiry works</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">4</span>
+          <div><strong>Product CRUD (admin)</strong> — Add, edit, delete products; image upload; producer and batch linking; stock qty updates</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">5</span>
+          <div><strong>Product browsing &amp; search</strong> — Category filter, keyword search, pagination, correct products displayed per category</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">6</span>
+          <div><strong>Basket &amp; stock check</strong> — Add items, update quantity, remove, stock-check prevents overselling, session persists</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">7</span>
+          <div><strong>Loyalty discount calculation</strong> — Correct tier assigned at thresholds (£25/£75/£150), discount correctly applied at checkout</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">8</span>
+          <div><strong>Checkout &amp; order placement</strong> — Order recorded in DB, stock_qty decremented, cumulative_spend updated, order confirmation</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">9</span>
+          <div><strong>Noticeboard &amp; events</strong> — Post submission, admin approval queue, event creation, booking registration</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--green-pale);border-radius:6px;font-size:13px;">
+          <span style="background:var(--green-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;">10</span>
+          <div><strong>Security testing</strong> — SQL injection attempts, XSS inputs, CSRF forgery, direct URL access to admin pages, brute-force simulation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Table -->
+    <div class="card-title" style="margin-bottom:8px;">Initial Test Plan</div>
+    <table class="test-table">
+      <thead>
+        <tr>
+          <th>Test ID</th>
+          <th>Feature</th>
+          <th>Test Description</th>
+          <th>Test Data Type</th>
+          <th>Input</th>
+          <th>Expected Result</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>T01</td><td>Login</td><td>Valid credentials accepted</td><td>Valid</td><td>Correct email + password</td><td>Session created, redirect to dashboard</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T02</td><td>Login</td><td>Wrong password rejected</td><td>Invalid</td><td>Correct email, wrong password</td><td>Error: "Invalid credentials", attempt counter +1</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T03</td><td>Login</td><td>Account locked after 5 attempts</td><td>Invalid Extreme</td><td>5× wrong password</td><td>Account locked message shown</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T04</td><td>Login</td><td>SQL injection in email field</td><td>Erroneous</td><td>admin' OR '1'='1</td><td>Input sanitised, no DB error, login refused</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T05</td><td>Register</td><td>Valid registration completes</td><td>Valid</td><td>All fields filled correctly</td><td>Account created, redirect to dashboard</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T06</td><td>Register</td><td>Duplicate email rejected</td><td>Invalid</td><td>Email already in DB</td><td>Error: "Email already registered"</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T07</td><td>Loyalty</td><td>£25 threshold — 5% discount</td><td>Valid Extreme</td><td>cumulative_spend = £25.00</td><td>Bronze tier, 5% discount applied</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T08</td><td>Loyalty</td><td>Just below £25 — no discount</td><td>Valid Extreme</td><td>cumulative_spend = £24.99</td><td>No discount applied</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T09</td><td>Loyalty</td><td>£150 threshold — 20% discount</td><td>Valid Extreme</td><td>cumulative_spend = £150.00</td><td>Gold tier, 20% discount applied</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T10</td><td>Basket</td><td>Add item within stock limit</td><td>Valid</td><td>qty=2, stock_qty=10</td><td>Item added to session basket</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T11</td><td>Basket</td><td>Add more than available stock</td><td>Invalid</td><td>qty=15, stock_qty=10</td><td>Error: "Insufficient stock"</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T12</td><td>Basket</td><td>Add negative quantity</td><td>Erroneous</td><td>qty=-1</td><td>Validation error: "Invalid quantity"</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T13</td><td>Admin</td><td>Non-admin accesses admin page</td><td>Invalid</td><td>Logged-in user visits /admin/</td><td>Redirected to homepage with error</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T14</td><td>Security</td><td>XSS in noticeboard post</td><td>Erroneous</td><td>&lt;script&gt;alert('xss')&lt;/script&gt;</td><td>Script stripped/encoded, not executed</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T15</td><td>Stock</td><td>Order reduces stock_qty</td><td>Valid</td><td>Order 3× product with stock_qty=10</td><td>stock_qty becomes 7 in DB</td><td><span class="badge-tbd">TBD</span></td></tr>
+        <tr><td>T16</td><td>Stock</td><td>Batch traceability preserved</td><td>Valid</td><td>Order placed for product</td><td>order_items.batch_id matches product.batch_id</td><td><span class="badge-tbd">TBD</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box">
+      <strong>Test data categories used:</strong>
+      <div class="tag-list">
+        <span class="tag">Valid — data within expected normal range</span>
+        <span class="tag">Valid Extreme — valid data at the exact boundary</span>
+        <span class="tag">Invalid — data outside acceptable range</span>
+        <span class="tag">Invalid Extreme — just outside boundary (e.g. £24.99 vs £25)</span>
+        <span class="tag">Erroneous — completely wrong type or malicious input</span>
+      </div>
+    </div>
+
+  </div><!-- end testing -->
+
+</div><!-- end container -->
+
+<footer>
+  <strong>Greenfield Local Hub — Task 1b Design Document</strong><br>
+  T Level Technical Qualification in Digital Production, Design and Development · HTML / CSS / JS · PHP · MySQL
+</footer>
+
+</body>
+</html>
